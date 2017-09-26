@@ -4,10 +4,18 @@
     {
       "textRaw": "File System",
       "name": "fs",
+      "introduced_in": "v0.10.0",
       "stability": 2,
       "stabilityText": "Stable",
       "desc": "<p>File I/O is provided by simple wrappers around standard POSIX functions.  To\nuse this module do <code>require(&#39;fs&#39;)</code>. All the methods have asynchronous and\nsynchronous forms.</p>\n<p>The asynchronous form always takes a completion callback as its last argument.\nThe arguments passed to the completion callback depend on the method, but the\nfirst argument is always reserved for an exception. If the operation was\ncompleted successfully, then the first argument will be <code>null</code> or <code>undefined</code>.</p>\n<p>When using the synchronous form any exceptions are immediately thrown.\nExceptions may be handled using <code>try</code>/<code>catch</code>, or they may be allowed to\nbubble up.</p>\n<p>Here is an example of the asynchronous version:</p>\n<pre><code class=\"lang-js\">const fs = require(&#39;fs&#39;);\n\nfs.unlink(&#39;/tmp/hello&#39;, (err) =&gt; {\n  if (err) throw err;\n  console.log(&#39;successfully deleted /tmp/hello&#39;);\n});\n</code></pre>\n<p>Here is the synchronous version:</p>\n<pre><code class=\"lang-js\">const fs = require(&#39;fs&#39;);\n\nfs.unlinkSync(&#39;/tmp/hello&#39;);\nconsole.log(&#39;successfully deleted /tmp/hello&#39;);\n</code></pre>\n<p>With the asynchronous methods there is no guaranteed ordering. So the\nfollowing is prone to error:</p>\n<pre><code class=\"lang-js\">fs.rename(&#39;/tmp/hello&#39;, &#39;/tmp/world&#39;, (err) =&gt; {\n  if (err) throw err;\n  console.log(&#39;renamed complete&#39;);\n});\nfs.stat(&#39;/tmp/world&#39;, (err, stats) =&gt; {\n  if (err) throw err;\n  console.log(`stats: ${JSON.stringify(stats)}`);\n});\n</code></pre>\n<p>It could be that <code>fs.stat</code> is executed before <code>fs.rename</code>.\nThe correct way to do this is to chain the callbacks.</p>\n<pre><code class=\"lang-js\">fs.rename(&#39;/tmp/hello&#39;, &#39;/tmp/world&#39;, (err) =&gt; {\n  if (err) throw err;\n  fs.stat(&#39;/tmp/world&#39;, (err, stats) =&gt; {\n    if (err) throw err;\n    console.log(`stats: ${JSON.stringify(stats)}`);\n  });\n});\n</code></pre>\n<p>In busy processes, the programmer is <em>strongly encouraged</em> to use the\nasynchronous versions of these calls. The synchronous versions will block\nthe entire process until they complete--halting all connections.</p>\n<p>The relative path to a filename can be used. Remember, however, that this path\nwill be relative to <code>process.cwd()</code>.</p>\n<p>While it is not recommended, most fs functions allow the callback argument to\nbe omitted, in which case a default callback is used that rethrows errors. To\nget a trace to the original call site, set the <code>NODE_DEBUG</code> environment\nvariable:</p>\n<p><em>Note</em>: Omitting the callback function on asynchronous fs functions is\ndeprecated and may result in an error being thrown in the future.</p>\n<pre><code class=\"lang-txt\">$ cat script.js\nfunction bad() {\n  require(&#39;fs&#39;).readFile(&#39;/&#39;);\n}\nbad();\n\n$ env NODE_DEBUG=fs node script.js\nfs.js:88\n        throw backtrace;\n        ^\nError: EISDIR: illegal operation on a directory, read\n    &lt;stack trace.&gt;\n</code></pre>\n<p><em>Note:</em> On Windows Node.js follows the concept of per-drive working directory.\nThis behavior can be observed when using a drive path without a backslash. For\nexample <code>fs.readdirSync(&#39;c:\\\\&#39;)</code> can potentially return a different result than\n<code>fs.readdirSync(&#39;c:&#39;)</code>. For more information, see\n<a href=\"https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247.aspx#fully_qualified_vs._relative_paths\">this MSDN page</a>.</p>\n",
       "modules": [
+        {
+          "textRaw": "Threadpool Usage",
+          "name": "threadpool_usage",
+          "desc": "<p>Note that all file system APIs except <code>fs.FSWatcher()</code> and those that are\nexplicitly synchronous use libuv&#39;s threadpool, which can have surprising and\nnegative performance implications for some applications, see the\n<a href=\"cli.html#cli_uv_threadpool_size_size\"><code>UV_THREADPOOL_SIZE</code></a> documentation for more information.</p>\n",
+          "type": "module",
+          "displayName": "Threadpool Usage"
+        },
         {
           "textRaw": "WHATWG URL object support",
           "name": "whatwg_url_object_support",
@@ -864,6 +872,116 @@
           "desc": "<p>Synchronous close(2). Returns <code>undefined</code>.</p>\n"
         },
         {
+          "textRaw": "fs.copyFile(src, dest[, flags], callback)",
+          "type": "method",
+          "name": "copyFile",
+          "meta": {
+            "added": [
+              "v8.5.0"
+            ],
+            "changes": []
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`src` {string|Buffer|URL} source filename to copy ",
+                  "name": "src",
+                  "type": "string|Buffer|URL",
+                  "desc": "source filename to copy"
+                },
+                {
+                  "textRaw": "`dest` {string|Buffer|URL} destination filename of the copy operation ",
+                  "name": "dest",
+                  "type": "string|Buffer|URL",
+                  "desc": "destination filename of the copy operation"
+                },
+                {
+                  "textRaw": "`flags` {number} modifiers for copy operation. **Default:** `0` ",
+                  "name": "flags",
+                  "type": "number",
+                  "desc": "modifiers for copy operation. **Default:** `0`",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "src"
+                },
+                {
+                  "name": "dest"
+                },
+                {
+                  "name": "flags",
+                  "optional": true
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>Asynchronously copies <code>src</code> to <code>dest</code>. By default, <code>dest</code> is overwritten if it\nalready exists. No arguments other than a possible exception are given to the\ncallback function. Node.js makes no guarantees about the atomicity of the copy\noperation. If an error occurs after the destination file has been opened for\nwriting, Node.js will attempt to remove the destination.</p>\n<p><code>flags</code> is an optional integer that specifies the behavior\nof the copy operation. The only supported flag is <code>fs.constants.COPYFILE_EXCL</code>,\nwhich causes the copy operation to fail if <code>dest</code> already exists.</p>\n<p>Example:</p>\n<pre><code class=\"lang-js\">const fs = require(&#39;fs&#39;);\n\n// destination.txt will be created or overwritten by default.\nfs.copyFile(&#39;source.txt&#39;, &#39;destination.txt&#39;, (err) =&gt; {\n  if (err) throw err;\n  console.log(&#39;source.txt was copied to destination.txt&#39;);\n});\n</code></pre>\n<p>If the third argument is a number, then it specifies <code>flags</code>, as shown in the\nfollowing example.</p>\n<pre><code class=\"lang-js\">const fs = require(&#39;fs&#39;);\nconst { COPYFILE_EXCL } = fs.constants;\n\n// By using COPYFILE_EXCL, the operation will fail if destination.txt exists.\nfs.copyFile(&#39;source.txt&#39;, &#39;destination.txt&#39;, COPYFILE_EXCL, callback);\n</code></pre>\n"
+        },
+        {
+          "textRaw": "fs.copyFileSync(src, dest[, flags])",
+          "type": "method",
+          "name": "copyFileSync",
+          "meta": {
+            "added": [
+              "v8.5.0"
+            ],
+            "changes": []
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`src` {string|Buffer|URL} source filename to copy ",
+                  "name": "src",
+                  "type": "string|Buffer|URL",
+                  "desc": "source filename to copy"
+                },
+                {
+                  "textRaw": "`dest` {string|Buffer|URL} destination filename of the copy operation ",
+                  "name": "dest",
+                  "type": "string|Buffer|URL",
+                  "desc": "destination filename of the copy operation"
+                },
+                {
+                  "textRaw": "`flags` {number} modifiers for copy operation. **Default:** `0` ",
+                  "name": "flags",
+                  "type": "number",
+                  "desc": "modifiers for copy operation. **Default:** `0`",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "src"
+                },
+                {
+                  "name": "dest"
+                },
+                {
+                  "name": "flags",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>Synchronously copies <code>src</code> to <code>dest</code>. By default, <code>dest</code> is overwritten if it\nalready exists. Returns <code>undefined</code>. Node.js makes no guarantees about the\natomicity of the copy operation. If an error occurs after the destination file\nhas been opened for writing, Node.js will attempt to remove the destination.</p>\n<p><code>flags</code> is an optional integer that specifies the behavior\nof the copy operation. The only supported flag is <code>fs.constants.COPYFILE_EXCL</code>,\nwhich causes the copy operation to fail if <code>dest</code> already exists.</p>\n<p>Example:</p>\n<pre><code class=\"lang-js\">const fs = require(&#39;fs&#39;);\n\n// destination.txt will be created or overwritten by default.\nfs.copyFileSync(&#39;source.txt&#39;, &#39;destination.txt&#39;);\nconsole.log(&#39;source.txt was copied to destination.txt&#39;);\n</code></pre>\n<p>If the third argument is a number, then it specifies <code>flags</code>, as shown in the\nfollowing example.</p>\n<pre><code class=\"lang-js\">const fs = require(&#39;fs&#39;);\nconst { COPYFILE_EXCL } = fs.constants;\n\n// By using COPYFILE_EXCL, the operation will fail if destination.txt exists.\nfs.copyFileSync(&#39;source.txt&#39;, &#39;destination.txt&#39;, COPYFILE_EXCL);\n</code></pre>\n"
+        },
+        {
           "textRaw": "fs.createReadStream(path[, options])",
           "type": "method",
           "name": "createReadStream",
@@ -1004,8 +1122,8 @@
                       "type": "string"
                     },
                     {
-                      "textRaw": "`defaultEncoding` {string} ",
-                      "name": "defaultEncoding",
+                      "textRaw": "`encoding` {string} ",
+                      "name": "encoding",
                       "type": "string"
                     },
                     {
@@ -1047,7 +1165,7 @@
               ]
             }
           ],
-          "desc": "<p>Returns a new <a href=\"#fs_class_fs_writestream\"><code>WriteStream</code></a> object. (See <a href=\"stream.html#stream_class_stream_writable\">Writable Stream</a>).</p>\n<p><code>options</code> is an object or string with the following defaults:</p>\n<pre><code class=\"lang-js\">const defaults = {\n  flags: &#39;w&#39;,\n  defaultEncoding: &#39;utf8&#39;,\n  fd: null,\n  mode: 0o666,\n  autoClose: true\n};\n</code></pre>\n<p><code>options</code> may also include a <code>start</code> option to allow writing data at\nsome position past the beginning of the file.  Modifying a file rather\nthan replacing it may require a <code>flags</code> mode of <code>r+</code> rather than the\ndefault mode <code>w</code>. The <code>defaultEncoding</code> can be any one of those accepted by\n<a href=\"buffer.html#buffer_buffer\"><code>Buffer</code></a>.</p>\n<p>If <code>autoClose</code> is set to true (default behavior) on <code>error</code> or <code>end</code>\nthe file descriptor will be closed automatically. If <code>autoClose</code> is false,\nthen the file descriptor won&#39;t be closed, even if there&#39;s an error.\nIt is the application&#39;s responsibility to close it and make sure there&#39;s no\nfile descriptor leak.</p>\n<p>Like <a href=\"#fs_class_fs_readstream\"><code>ReadStream</code></a>, if <code>fd</code> is specified, <code>WriteStream</code> will ignore the\n<code>path</code> argument and will use the specified file descriptor. This means that no\n<code>&#39;open&#39;</code> event will be emitted. Note that <code>fd</code> should be blocking; non-blocking\n<code>fd</code>s should be passed to <a href=\"net.html#net_class_net_socket\"><code>net.Socket</code></a>.</p>\n<p>If <code>options</code> is a string, then it specifies the encoding.</p>\n"
+          "desc": "<p>Returns a new <a href=\"#fs_class_fs_writestream\"><code>WriteStream</code></a> object. (See <a href=\"stream.html#stream_class_stream_writable\">Writable Stream</a>).</p>\n<p><code>options</code> is an object or string with the following defaults:</p>\n<pre><code class=\"lang-js\">const defaults = {\n  flags: &#39;w&#39;,\n  encoding: &#39;utf8&#39;,\n  fd: null,\n  mode: 0o666,\n  autoClose: true\n};\n</code></pre>\n<p><code>options</code> may also include a <code>start</code> option to allow writing data at\nsome position past the beginning of the file.  Modifying a file rather\nthan replacing it may require a <code>flags</code> mode of <code>r+</code> rather than the\ndefault mode <code>w</code>. The <code>encoding</code> can be any one of those accepted by\n<a href=\"buffer.html#buffer_buffer\"><code>Buffer</code></a>.</p>\n<p>If <code>autoClose</code> is set to true (default behavior) on <code>error</code> or <code>end</code>\nthe file descriptor will be closed automatically. If <code>autoClose</code> is false,\nthen the file descriptor won&#39;t be closed, even if there&#39;s an error.\nIt is the application&#39;s responsibility to close it and make sure there&#39;s no\nfile descriptor leak.</p>\n<p>Like <a href=\"#fs_class_fs_readstream\"><code>ReadStream</code></a>, if <code>fd</code> is specified, <code>WriteStream</code> will ignore the\n<code>path</code> argument and will use the specified file descriptor. This means that no\n<code>&#39;open&#39;</code> event will be emitted. Note that <code>fd</code> should be blocking; non-blocking\n<code>fd</code>s should be passed to <a href=\"net.html#net_class_net_socket\"><code>net.Socket</code></a>.</p>\n<p>If <code>options</code> is a string, then it specifies the encoding.</p>\n"
         },
         {
           "textRaw": "fs.exists(path, callback)",

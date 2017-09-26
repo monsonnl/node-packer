@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Command Line Options | Node.js v8.4.0 Documentation</title>
+  <title>Command Line Options | Node.js v8.5.0 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/sh.css">
@@ -37,6 +37,7 @@
 <li><a class="nav-deprecations" href="deprecations.html">Deprecated APIs</a></li>
 <li><a class="nav-dns" href="dns.html">DNS</a></li>
 <li><a class="nav-domain" href="domain.html">Domain</a></li>
+<li><a class="nav-esm" href="esm.html">ECMAScript Modules</a></li>
 <li><a class="nav-errors" href="errors.html">Errors</a></li>
 <li><a class="nav-events" href="events.html">Events</a></li>
 <li><a class="nav-fs" href="fs.html">File System</a></li>
@@ -50,6 +51,7 @@
 <li><a class="nav-net" href="net.html">Net</a></li>
 <li><a class="nav-os" href="os.html">OS</a></li>
 <li><a class="nav-path" href="path.html">Path</a></li>
+<li><a class="nav-perf_hooks" href="perf_hooks.html">Performance Hooks</a></li>
 <li><a class="nav-process" href="process.html">Process</a></li>
 <li><a class="nav-punycode" href="punycode.html">Punycode</a></li>
 <li><a class="nav-querystring" href="querystring.html">Query Strings</a></li>
@@ -79,13 +81,25 @@
 
     <div id="column1" data-id="cli" class="interior">
       <header>
-        <h1>Node.js v8.4.0 Documentation</h1>
+        <h1>Node.js v8.5.0 Documentation</h1>
         <div id="gtoc">
-          <p>
-            <a href="index.html" name="toc">Index</a> |
-            <a href="all.html">View on single page</a> |
-            <a href="cli.json">View as JSON</a>
-          </p>
+          <ul>
+            <li>
+              <a href="index.html" name="toc">Index</a> |
+            </li>
+            <li>
+              <a href="all.html">View on single page</a> |
+            </li>
+            <li>
+              <a href="cli.json">View as JSON</a> |
+            </li>
+            <li class="version-picker">
+              <a href="#">View another version <span>&#x25bc;</span></a>
+              <ol class="version-picker"><li><a href="https://nodejs.org/docs/latest-v8.x/api/cli.html">8.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v7.x/api/cli.html">7.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v6.x/api/cli.html">6.x <b>LTS</b></a></li></ol>
+            </li>
+          </ul>
         </div>
         <hr>
       </header>
@@ -149,6 +163,7 @@
 <li><span class="stability_undefined"><a href="#cli_ssl_cert_dir_dir"><code>SSL_CERT_DIR=dir</code></a></span></li>
 <li><span class="stability_undefined"><a href="#cli_ssl_cert_file_file"><code>SSL_CERT_FILE=file</code></a></span></li>
 <li><span class="stability_undefined"><a href="#cli_node_redirect_warnings_file"><code>NODE_REDIRECT_WARNINGS=file</code></a></span></li>
+<li><span class="stability_undefined"><a href="#cli_uv_threadpool_size_size"><code>UV_THREADPOOL_SIZE=size</code></a></span></li>
 </ul>
 </li>
 </ul>
@@ -159,6 +174,7 @@
 
       <div id="apicontent">
         <h1>Command Line Options<span><a class="mark" href="#cli_command_line_options" id="cli_command_line_options">#</a></span></h1>
+<!--introduced_in=v5.9.1-->
 <!--type=misc-->
 <p>Node.js comes with a variety of CLI options. These options expose built-in
 debugging, multiple ways to execute scripts, and other helpful runtime options.</p>
@@ -382,13 +398,13 @@ used to enable FIPS-compliant crypto if Node.js is built with
 <div class="api_metadata">
 <span>Added in: v7.5.0</span>
 </div><p>Use OpenSSL&#39;s default CA store or use bundled Mozilla CA store as supplied by
-current NodeJS version. The default store is selectable at build-time.</p>
+current Node.js version. The default store is selectable at build-time.</p>
 <p>Using OpenSSL store allows for external modifications of the store. For most
 Linux and BSD distributions, this store is maintained by the distribution
 maintainers and system administrators. OpenSSL CA store location is dependent on
 configuration of the OpenSSL library but this can be altered at runtime using
-environmental variables.</p>
-<p>The bundled CA store, as supplied by NodeJS, is a snapshot of Mozilla CA store
+environment variables.</p>
+<p>The bundled CA store, as supplied by Node.js, is a snapshot of Mozilla CA store
 that is fixed at release time. It is identical on all supported platforms.</p>
 <p>See <code>SSL_CERT_DIR</code> and <code>SSL_CERT_FILE</code>.</p>
 <h3><code>--icu-data-dir=file</code><span><a class="mark" href="#cli_icu_data_dir_file" id="cli_icu_data_dir_file">#</a></span></h3>
@@ -514,7 +530,7 @@ variable is ignored.</p>
 </div><p>If <code>--use-openssl-ca</code> is enabled, this overrides and sets OpenSSL&#39;s directory
 containing trusted certificates.</p>
 <p><em>Note</em>: Be aware that unless the child environment is explicitly set, this
-evironment variable will be inherited by any child processes, and if they use
+environment variable will be inherited by any child processes, and if they use
 OpenSSL, it may cause them to trust the same CAs as node.</p>
 <h3><code>SSL_CERT_FILE=file</code><span><a class="mark" href="#cli_ssl_cert_file_file" id="cli_ssl_cert_file_file">#</a></span></h3>
 <div class="api_metadata">
@@ -522,7 +538,7 @@ OpenSSL, it may cause them to trust the same CAs as node.</p>
 </div><p>If <code>--use-openssl-ca</code> is enabled, this overrides and sets OpenSSL&#39;s file
 containing trusted certificates.</p>
 <p><em>Note</em>: Be aware that unless the child environment is explicitly set, this
-evironment variable will be inherited by any child processes, and if they use
+environment variable will be inherited by any child processes, and if they use
 OpenSSL, it may cause them to trust the same CAs as node.</p>
 <h3><code>NODE_REDIRECT_WARNINGS=file</code><span><a class="mark" href="#cli_node_redirect_warnings_file" id="cli_node_redirect_warnings_file">#</a></span></h3>
 <div class="api_metadata">
@@ -532,6 +548,27 @@ printing to stderr. The file will be created if it does not exist, and will be
 appended to if it does. If an error occurs while attempting to write the
 warning to the file, the warning will be written to stderr instead. This is
 equivalent to using the <code>--redirect-warnings=file</code> command-line flag.</p>
+<h3><code>UV_THREADPOOL_SIZE=size</code><span><a class="mark" href="#cli_uv_threadpool_size_size" id="cli_uv_threadpool_size_size">#</a></span></h3>
+<p>Set the number of threads used in libuv&#39;s threadpool to <code>size</code> threads.</p>
+<p>Asynchronous system APIs are used by Node.js whenever possible, but where they
+do not exist, libuv&#39;s threadpool is used to create asynchronous node APIs based
+on synchronous system APIs. Node.js APIs that use the threadpool are:</p>
+<ul>
+<li>all <code>fs</code> APIs, other than the file watcher APIs and those that are explicitly
+synchronous</li>
+<li><code>crypto.pbkdf2()</code></li>
+<li><code>crypto.randomBytes()</code>, unless it is used without a callback</li>
+<li><code>crypto.randomFill()</code></li>
+<li><code>dns.lookup()</code></li>
+<li>all <code>zlib</code> APIs, other than those that are explicitly synchronous</li>
+</ul>
+<p>Because libuv&#39;s threadpool has a fixed size, it means that if for whatever
+reason any of these APIs takes a long time, other (seemingly unrelated) APIs
+that run in libuv&#39;s threadpool will experience degraded performance. In order to
+mitigate this issue, one potential solution is to increase the size of libuv&#39;s
+threadpool by setting the <code>&#39;UV_THREADPOOL_SIZE&#39;</code> environment variable to a value
+greater than <code>4</code> (its current default value).  For more information, see the
+<a href="http://docs.libuv.org/en/latest/threadpool.html">libuv threadpool documentation</a>.</p>
 
       </div>
     </div>

@@ -1,9 +1,11 @@
 {
   "source": "doc/api/cli.md",
+  "introduced_in": "v5.9.1",
   "miscs": [
     {
       "textRaw": "Command Line Options",
       "name": "Command Line Options",
+      "introduced_in": "v5.9.1",
       "type": "misc",
       "desc": "<p>Node.js comes with a variety of CLI options. These options expose built-in\ndebugging, multiple ways to execute scripts, and other helpful runtime options.</p>\n<p>To view this documentation as a manual page in a terminal, run <code>man node</code>.</p>\n",
       "miscs": [
@@ -456,7 +458,7 @@
                 ],
                 "changes": []
               },
-              "desc": "<p>Use OpenSSL&#39;s default CA store or use bundled Mozilla CA store as supplied by\ncurrent NodeJS version. The default store is selectable at build-time.</p>\n<p>Using OpenSSL store allows for external modifications of the store. For most\nLinux and BSD distributions, this store is maintained by the distribution\nmaintainers and system administrators. OpenSSL CA store location is dependent on\nconfiguration of the OpenSSL library but this can be altered at runtime using\nenvironmental variables.</p>\n<p>The bundled CA store, as supplied by NodeJS, is a snapshot of Mozilla CA store\nthat is fixed at release time. It is identical on all supported platforms.</p>\n<p>See <code>SSL_CERT_DIR</code> and <code>SSL_CERT_FILE</code>.</p>\n",
+              "desc": "<p>Use OpenSSL&#39;s default CA store or use bundled Mozilla CA store as supplied by\ncurrent Node.js version. The default store is selectable at build-time.</p>\n<p>Using OpenSSL store allows for external modifications of the store. For most\nLinux and BSD distributions, this store is maintained by the distribution\nmaintainers and system administrators. OpenSSL CA store location is dependent on\nconfiguration of the OpenSSL library but this can be altered at runtime using\nenvironment variables.</p>\n<p>The bundled CA store, as supplied by Node.js, is a snapshot of Mozilla CA store\nthat is fixed at release time. It is identical on all supported platforms.</p>\n<p>See <code>SSL_CERT_DIR</code> and <code>SSL_CERT_FILE</code>.</p>\n",
               "type": "module",
               "displayName": "`--use-openssl-ca`, `--use-bundled-ca`"
             },
@@ -659,7 +661,7 @@
                 ],
                 "changes": []
               },
-              "desc": "<p>If <code>--use-openssl-ca</code> is enabled, this overrides and sets OpenSSL&#39;s directory\ncontaining trusted certificates.</p>\n<p><em>Note</em>: Be aware that unless the child environment is explicitly set, this\nevironment variable will be inherited by any child processes, and if they use\nOpenSSL, it may cause them to trust the same CAs as node.</p>\n",
+              "desc": "<p>If <code>--use-openssl-ca</code> is enabled, this overrides and sets OpenSSL&#39;s directory\ncontaining trusted certificates.</p>\n<p><em>Note</em>: Be aware that unless the child environment is explicitly set, this\nenvironment variable will be inherited by any child processes, and if they use\nOpenSSL, it may cause them to trust the same CAs as node.</p>\n",
               "type": "module",
               "displayName": "`SSL_CERT_DIR=dir`"
             },
@@ -672,7 +674,7 @@
                 ],
                 "changes": []
               },
-              "desc": "<p>If <code>--use-openssl-ca</code> is enabled, this overrides and sets OpenSSL&#39;s file\ncontaining trusted certificates.</p>\n<p><em>Note</em>: Be aware that unless the child environment is explicitly set, this\nevironment variable will be inherited by any child processes, and if they use\nOpenSSL, it may cause them to trust the same CAs as node.</p>\n",
+              "desc": "<p>If <code>--use-openssl-ca</code> is enabled, this overrides and sets OpenSSL&#39;s file\ncontaining trusted certificates.</p>\n<p><em>Note</em>: Be aware that unless the child environment is explicitly set, this\nenvironment variable will be inherited by any child processes, and if they use\nOpenSSL, it may cause them to trust the same CAs as node.</p>\n",
               "type": "module",
               "displayName": "`SSL_CERT_FILE=file`"
             },
@@ -688,6 +690,13 @@
               "desc": "<p>When set, process warnings will be emitted to the given file instead of\nprinting to stderr. The file will be created if it does not exist, and will be\nappended to if it does. If an error occurs while attempting to write the\nwarning to the file, the warning will be written to stderr instead. This is\nequivalent to using the <code>--redirect-warnings=file</code> command-line flag.</p>\n",
               "type": "module",
               "displayName": "`NODE_REDIRECT_WARNINGS=file`"
+            },
+            {
+              "textRaw": "`UV_THREADPOOL_SIZE=size`",
+              "name": "`uv_threadpool_size=size`",
+              "desc": "<p>Set the number of threads used in libuv&#39;s threadpool to <code>size</code> threads.</p>\n<p>Asynchronous system APIs are used by Node.js whenever possible, but where they\ndo not exist, libuv&#39;s threadpool is used to create asynchronous node APIs based\non synchronous system APIs. Node.js APIs that use the threadpool are:</p>\n<ul>\n<li>all <code>fs</code> APIs, other than the file watcher APIs and those that are explicitly\nsynchronous</li>\n<li><code>crypto.pbkdf2()</code></li>\n<li><code>crypto.randomBytes()</code>, unless it is used without a callback</li>\n<li><code>crypto.randomFill()</code></li>\n<li><code>dns.lookup()</code></li>\n<li>all <code>zlib</code> APIs, other than those that are explicitly synchronous</li>\n</ul>\n<p>Because libuv&#39;s threadpool has a fixed size, it means that if for whatever\nreason any of these APIs takes a long time, other (seemingly unrelated) APIs\nthat run in libuv&#39;s threadpool will experience degraded performance. In order to\nmitigate this issue, one potential solution is to increase the size of libuv&#39;s\nthreadpool by setting the <code>&#39;UV_THREADPOOL_SIZE&#39;</code> environment variable to a value\ngreater than <code>4</code> (its current default value).  For more information, see the\n<a href=\"http://docs.libuv.org/en/latest/threadpool.html\">libuv threadpool documentation</a>.</p>\n",
+              "type": "module",
+              "displayName": "`UV_THREADPOOL_SIZE=size`"
             }
           ],
           "type": "misc",

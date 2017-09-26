@@ -61,11 +61,11 @@
               "displayName": "DEP0009: crypto.pbkdf2 without digest"
             },
             {
-              "textRaw": "DEP0013: fs async function without callback",
-              "name": "dep0013:_fs_async_function_without_callback",
+              "textRaw": "DEP0013: fs asynchronous function without callback",
+              "name": "dep0013:_fs_asynchronous_function_without_callback",
               "desc": "<p>Type: Runtime</p>\n<p>Calling an asynchronous function without a callback is deprecated.</p>\n<p><a id=\"DEP0014\"></a></p>\n",
               "type": "module",
-              "displayName": "DEP0013: fs async function without callback"
+              "displayName": "DEP0013: fs asynchronous function without callback"
             },
             {
               "textRaw": "DEP0014: fs.read legacy String interface",

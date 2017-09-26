@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>VM (Executing JavaScript) | Node.js v8.4.0 Documentation</title>
+  <title>VM (Executing JavaScript) | Node.js v8.5.0 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/sh.css">
@@ -37,6 +37,7 @@
 <li><a class="nav-deprecations" href="deprecations.html">Deprecated APIs</a></li>
 <li><a class="nav-dns" href="dns.html">DNS</a></li>
 <li><a class="nav-domain" href="domain.html">Domain</a></li>
+<li><a class="nav-esm" href="esm.html">ECMAScript Modules</a></li>
 <li><a class="nav-errors" href="errors.html">Errors</a></li>
 <li><a class="nav-events" href="events.html">Events</a></li>
 <li><a class="nav-fs" href="fs.html">File System</a></li>
@@ -50,6 +51,7 @@
 <li><a class="nav-net" href="net.html">Net</a></li>
 <li><a class="nav-os" href="os.html">OS</a></li>
 <li><a class="nav-path" href="path.html">Path</a></li>
+<li><a class="nav-perf_hooks" href="perf_hooks.html">Performance Hooks</a></li>
 <li><a class="nav-process" href="process.html">Process</a></li>
 <li><a class="nav-punycode" href="punycode.html">Punycode</a></li>
 <li><a class="nav-querystring" href="querystring.html">Query Strings</a></li>
@@ -79,13 +81,29 @@
 
     <div id="column1" data-id="vm" class="interior">
       <header>
-        <h1>Node.js v8.4.0 Documentation</h1>
+        <h1>Node.js v8.5.0 Documentation</h1>
         <div id="gtoc">
-          <p>
-            <a href="index.html" name="toc">Index</a> |
-            <a href="all.html">View on single page</a> |
-            <a href="vm.json">View as JSON</a>
-          </p>
+          <ul>
+            <li>
+              <a href="index.html" name="toc">Index</a> |
+            </li>
+            <li>
+              <a href="all.html">View on single page</a> |
+            </li>
+            <li>
+              <a href="vm.json">View as JSON</a> |
+            </li>
+            <li class="version-picker">
+              <a href="#">View another version <span>&#x25bc;</span></a>
+              <ol class="version-picker"><li><a href="https://nodejs.org/docs/latest-v8.x/api/vm.html">8.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v7.x/api/vm.html">7.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v6.x/api/vm.html">6.x <b>LTS</b></a></li>
+<li><a href="https://nodejs.org/docs/latest-v5.x/api/vm.html">5.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v4.x/api/vm.html">4.x <b>LTS</b></a></li>
+<li><a href="https://nodejs.org/docs/latest-v0.12.x/api/vm.html">0.12.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v0.10.x/api/vm.html">0.10.x</a></li></ol>
+            </li>
+          </ul>
         </div>
         <hr>
       </header>
@@ -117,7 +135,8 @@
 
       <div id="apicontent">
         <h1>VM (Executing JavaScript)<span><a class="mark" href="#vm_vm_executing_javascript" id="vm_vm_executing_javascript">#</a></span></h1>
-<pre class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</pre><!--name=vm-->
+<!--introduced_in=v0.10.0-->
+<div class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</div><!--name=vm-->
 <p>The <code>vm</code> module provides APIs for compiling and running code within V8 Virtual
 Machine contexts. It can be accessed using:</p>
 <pre><code class="lang-js">const vm = require(&#39;vm&#39;);
@@ -407,7 +426,7 @@ console.log(util.inspect(sandbox));
 <h2>vm.runInDebugContext(code)<span><a class="mark" href="#vm_vm_runindebugcontext_code" id="vm_vm_runindebugcontext_code">#</a></span></h2>
 <div class="api_metadata">
 <span>Added in: v0.11.14</span>
-</div><pre class="api_stability api_stability_0"><a href="documentation.html#documentation_stability_index">Stability: 0</a> - Deprecated. An alternative is in development.</pre><ul>
+</div><div class="api_stability api_stability_0"><a href="documentation.html#documentation_stability_index">Stability: 0</a> - Deprecated. An alternative is in development.</div><ul>
 <li><code>code</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> The JavaScript code to compile and run.</li>
 </ul>
 <p>The <code>vm.runInDebugContext()</code> method compiles and executes <code>code</code> inside the V8

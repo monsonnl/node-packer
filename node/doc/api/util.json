@@ -4,6 +4,7 @@
     {
       "textRaw": "Util",
       "name": "util",
+      "introduced_in": "v0.10.0",
       "stability": 2,
       "stabilityText": "Stable",
       "desc": "<p>The <code>util</code> module is primarily designed to support the needs of Node.js&#39; own\ninternal APIs. However, many of the utilities are useful for application and\nmodule developers as well. It can be accessed using:</p>\n<pre><code class=\"lang-js\">const util = require(&#39;util&#39;);\n</code></pre>\n",

@@ -1,11 +1,13 @@
 {
   "source": "doc/api/debugger.md",
+  "introduced_in": "v0.9.12",
   "stability": 2,
   "stabilityText": "Stable",
   "miscs": [
     {
       "textRaw": "Debugger",
       "name": "Debugger",
+      "introduced_in": "v0.9.12",
       "stability": 2,
       "stabilityText": "Stable",
       "type": "misc",

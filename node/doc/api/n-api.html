@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>N-API | Node.js v8.4.0 Documentation</title>
+  <title>N-API | Node.js v8.5.0 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/sh.css">
@@ -37,6 +37,7 @@
 <li><a class="nav-deprecations" href="deprecations.html">Deprecated APIs</a></li>
 <li><a class="nav-dns" href="dns.html">DNS</a></li>
 <li><a class="nav-domain" href="domain.html">Domain</a></li>
+<li><a class="nav-esm" href="esm.html">ECMAScript Modules</a></li>
 <li><a class="nav-errors" href="errors.html">Errors</a></li>
 <li><a class="nav-events" href="events.html">Events</a></li>
 <li><a class="nav-fs" href="fs.html">File System</a></li>
@@ -50,6 +51,7 @@
 <li><a class="nav-net" href="net.html">Net</a></li>
 <li><a class="nav-os" href="os.html">OS</a></li>
 <li><a class="nav-path" href="path.html">Path</a></li>
+<li><a class="nav-perf_hooks" href="perf_hooks.html">Performance Hooks</a></li>
 <li><a class="nav-process" href="process.html">Process</a></li>
 <li><a class="nav-punycode" href="punycode.html">Punycode</a></li>
 <li><a class="nav-querystring" href="querystring.html">Query Strings</a></li>
@@ -79,13 +81,23 @@
 
     <div id="column1" data-id="n-api" class="interior">
       <header>
-        <h1>Node.js v8.4.0 Documentation</h1>
+        <h1>Node.js v8.5.0 Documentation</h1>
         <div id="gtoc">
-          <p>
-            <a href="index.html" name="toc">Index</a> |
-            <a href="all.html">View on single page</a> |
-            <a href="n-api.json">View as JSON</a>
-          </p>
+          <ul>
+            <li>
+              <a href="index.html" name="toc">Index</a> |
+            </li>
+            <li>
+              <a href="all.html">View on single page</a> |
+            </li>
+            <li>
+              <a href="n-api.json">View as JSON</a> |
+            </li>
+            <li class="version-picker">
+              <a href="#">View another version <span>&#x25bc;</span></a>
+              
+            </li>
+          </ul>
         </div>
         <hr>
       </header>
@@ -186,8 +198,8 @@
 <li><span class="stability_undefined"><a href="#n_api_napi_create_uint32"><em>napi_create_uint32</em></a></span></li>
 <li><span class="stability_undefined"><a href="#n_api_napi_create_int64"><em>napi_create_int64</em></a></span></li>
 <li><span class="stability_undefined"><a href="#n_api_napi_create_double"><em>napi_create_double</em></a></span></li>
-<li><span class="stability_undefined"><a href="#n_api_napi_create_string_utf16"><em>napi_create_string_utf16</em></a></span></li>
 <li><span class="stability_undefined"><a href="#n_api_napi_create_string_latin1"><em>napi_create_string_latin1</em></a></span></li>
+<li><span class="stability_undefined"><a href="#n_api_napi_create_string_utf16"><em>napi_create_string_utf16</em></a></span></li>
 <li><span class="stability_undefined"><a href="#n_api_napi_create_string_utf8"><em>napi_create_string_utf8</em></a></span></li>
 </ul>
 </li>
@@ -203,6 +215,7 @@
 <li><span class="stability_undefined"><a href="#n_api_napi_get_value_external"><em>napi_get_value_external</em></a></span></li>
 <li><span class="stability_undefined"><a href="#n_api_napi_get_value_int32"><em>napi_get_value_int32</em></a></span></li>
 <li><span class="stability_undefined"><a href="#n_api_napi_get_value_int64"><em>napi_get_value_int64</em></a></span></li>
+<li><span class="stability_undefined"><a href="#n_api_napi_get_value_string_latin1"><em>napi_get_value_string_latin1</em></a></span></li>
 <li><span class="stability_undefined"><a href="#n_api_napi_get_value_string_utf8"><em>napi_get_value_string_utf8</em></a></span></li>
 <li><span class="stability_undefined"><a href="#n_api_napi_get_value_string_utf16"><em>napi_get_value_string_utf16</em></a></span></li>
 <li><span class="stability_undefined"><a href="#n_api_napi_get_value_uint32"><em>napi_get_value_uint32</em></a></span></li>
@@ -271,6 +284,7 @@
 <li><span class="stability_undefined"><a href="#n_api_napi_define_class"><em>napi_define_class</em></a></span></li>
 <li><span class="stability_undefined"><a href="#n_api_napi_wrap"><em>napi_wrap</em></a></span></li>
 <li><span class="stability_undefined"><a href="#n_api_napi_unwrap"><em>napi_unwrap</em></a></span></li>
+<li><span class="stability_undefined"><a href="#n_api_napi_remove_wrap"><em>napi_remove_wrap</em></a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#n_api_asynchronous_operations">Asynchronous Operations</a></span><ul>
@@ -285,6 +299,21 @@
 <li><span class="stability_undefined"><a href="#n_api_napi_get_version">napi_get_version</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#n_api_memory_management">Memory Management</a></span><ul>
+<li><span class="stability_undefined"><a href="#n_api_napi_adjust_external_memory">napi_adjust_external_memory</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#n_api_promises">Promises</a></span><ul>
+<li><span class="stability_undefined"><a href="#n_api_napi_create_promise">napi_create_promise</a></span></li>
+<li><span class="stability_undefined"><a href="#n_api_napi_resolve_deferred">napi_resolve_deferred</a></span></li>
+<li><span class="stability_undefined"><a href="#n_api_napi_reject_deferred">napi_reject_deferred</a></span></li>
+<li><span class="stability_undefined"><a href="#n_api_napi_is_promise">napi_is_promise</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#n_api_script_execution">Script execution</a></span><ul>
+<li><span class="stability_undefined"><a href="#n_api_napi_run_script">napi_run_script</a></span></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -293,7 +322,7 @@
 
       <div id="apicontent">
         <h1>N-API<span><a class="mark" href="#n_api_n_api" id="n_api_n_api">#</a></span></h1>
-<pre class="api_stability api_stability_1"><a href="documentation.html#documentation_stability_index">Stability: 1</a> - Experimental</pre><p>N-API (pronounced N as in the letter, followed by API)
+<div class="api_stability api_stability_1"><a href="documentation.html#documentation_stability_index">Stability: 1</a> - Experimental</div><p>N-API (pronounced N as in the letter, followed by API)
 is an API for building native Addons. It is independent from
 the underlying JavaScript runtime (ex V8) and is maintained as part of
 Node.js itself. This API will be Application Binary Interface (ABI) stable
@@ -332,6 +361,8 @@ handling section <a href="#n_api_error_handling">Error Handling</a>.</li>
 <li><a href="#n_api_working_with_javascript_functions">Working with JavaScript Functions</a></li>
 <li><a href="#n_api_object_wrap">Object Wrap</a></li>
 <li><a href="#n_api_asynchronous_operations">Asynchronous Operations</a></li>
+<li><a href="#n_api_promises">Promises</a></li>
+<li><a href="#n_api_script_execution">Script Execution</a></li>
 </ul>
 <p>The N-API is a C API that ensures ABI stability across Node.js versions
 and different compiler levels. However, we also understand that a C++
@@ -1004,7 +1035,7 @@ will be NULL.</p>
 <p>N-API modules are registered in the same manner as other modules
 except that instead of using the <code>NODE_MODULE</code> macro the following
 is used:</p>
-<pre><code class="lang-C">NAPI_MODULE(addon, Init)
+<pre><code class="lang-C">NAPI_MODULE(NODE_GYP_MODULE_NAME, Init)
 </code></pre>
 <p>The next difference is the signature for the <code>Init</code> method. For a N-API
 module it is as follows:</p>
@@ -1480,6 +1511,26 @@ Number type.</p>
 <p>The JavaScript Number type is described in
 <a href="https://tc39.github.io/ecma262/#sec-ecmascript-language-types-number-type">Section 6.1.6</a>
 of the ECMAScript Language Specification.</p>
+<h4><em>napi_create_string_latin1</em><span><a class="mark" href="#n_api_napi_create_string_latin1" id="n_api_napi_create_string_latin1">#</a></span></h4>
+<div class="api_metadata">
+<span>Added in: v8.0.0</span>
+</div><pre><code class="lang-C">NAPI_EXTERN napi_status napi_create_string_latin1(napi_env env,
+                                                  const char* str,
+                                                  size_t length,
+                                                  napi_value* result);
+</code></pre>
+<ul>
+<li><code>[in] env</code>: The environment that the API is invoked under.</li>
+<li><code>[in] str</code>: Character buffer representing a ISO-8859-1-encoded string.</li>
+<li><code>[in] length</code>: The length of the string in bytes, or -1 if it is
+null-terminated.</li>
+<li><code>[out] result</code>: A <code>napi_value</code> representing a JavaScript String.</li>
+</ul>
+<p>Returns <code>napi_ok</code> if the API succeeded.</p>
+<p>This API creates a JavaScript String object from a ISO-8859-1-encoded C string.</p>
+<p>The JavaScript String type is described in
+<a href="https://tc39.github.io/ecma262/#sec-ecmascript-language-types-string-type">Section 6.1.4</a>
+of the ECMAScript Language Specification.</p>
 <h4><em>napi_create_string_utf16</em><span><a class="mark" href="#n_api_napi_create_string_utf16" id="n_api_napi_create_string_utf16">#</a></span></h4>
 <div class="api_metadata">
 <span>Added in: v8.0.0</span>
@@ -1497,26 +1548,6 @@ it is null-terminated.</li>
 </ul>
 <p>Returns <code>napi_ok</code> if the API succeeded.</p>
 <p>This API creates a JavaScript String object from a UTF16-LE-encoded C string</p>
-<p>The JavaScript String type is described in
-<a href="https://tc39.github.io/ecma262/#sec-ecmascript-language-types-string-type">Section 6.1.4</a>
-of the ECMAScript Language Specification.</p>
-<h4><em>napi_create_string_latin1</em><span><a class="mark" href="#n_api_napi_create_string_latin1" id="n_api_napi_create_string_latin1">#</a></span></h4>
-<div class="api_metadata">
-<span>Added in: v8.0.0</span>
-</div><pre><code class="lang-C">NAPI_EXTERN napi_status napi_create_string_latin1(napi_env env,
-                                                  const char* str,
-                                                  size_t length,
-                                                  napi_value* result);
-</code></pre>
-<ul>
-<li><code>[in] env</code>: The environment that the API is invoked under.</li>
-<li><code>[in] str</code>: Character buffer representing a latin1-encoded string.</li>
-<li><code>[in] length</code>: The length of the string in bytes, or -1 if it is
-null-terminated.</li>
-<li><code>[out] result</code>: A <code>napi_value</code> representing a JavaScript String.</li>
-</ul>
-<p>Returns <code>napi_ok</code> if the API succeeded.</p>
-<p>This API creates a JavaScript String object from a latin1-encoded C string.</p>
 <p>The JavaScript String type is described in
 <a href="https://tc39.github.io/ecma262/#sec-ecmascript-language-types-string-type">Section 6.1.4</a>
 of the ECMAScript Language Specification.</p>
@@ -1746,6 +1777,29 @@ a negative number if the the value is &gt; 2^31 -1.</p>
 is passed in it returns <code>napi_number_expected</code>.</p>
 <p>This API returns the C int64 primitive equivalent of the given
 JavaScript Number</p>
+<h4><em>napi_get_value_string_latin1</em><span><a class="mark" href="#n_api_napi_get_value_string_latin1" id="n_api_napi_get_value_string_latin1">#</a></span></h4>
+<div class="api_metadata">
+<span>Added in: v8.0.0</span>
+</div><pre><code class="lang-C">NAPI_EXTERN napi_status napi_get_value_string_latin1(napi_env env,
+                                                     napi_value value,
+                                                     char* buf,
+                                                     size_t bufsize,
+                                                     size_t* result)
+</code></pre>
+<ul>
+<li><code>[in] env</code>: The environment that the API is invoked under.</li>
+<li><code>[in] value</code>: <code>napi_value</code> representing JavaScript string.</li>
+<li><code>[in] buf</code>: Buffer to write the ISO-8859-1-encoded string into. If NULL is
+passed in, the length of the string (in bytes) is returned.</li>
+<li><code>[in] bufsize</code>: Size of the destination buffer. When this value is
+insufficient, the returned string will be truncated.</li>
+<li><code>[out] result</code>: Number of bytes copied into the buffer, excluding the null
+terminator.</li>
+</ul>
+<p>Returns <code>napi_ok</code> if the API succeeded. If a non-String <code>napi_value</code>
+is passed in it returns <code>napi_string_expected</code>.</p>
+<p>This API returns the ISO-8859-1-encoded string corresponding the value passed
+in.</p>
 <h4><em>napi_get_value_string_utf8</em><span><a class="mark" href="#n_api_napi_get_value_string_utf8" id="n_api_napi_get_value_string_utf8">#</a></span></h4>
 <div class="api_metadata">
 <span>Added in: v8.0.0</span>
@@ -1760,13 +1814,13 @@ JavaScript Number</p>
 <li><code>[in] value</code>: <code>napi_value</code> representing JavaScript string.</li>
 <li><code>[in] buf</code>: Buffer to write the UTF8-encoded string into. If NULL is passed
 in, the length of the string (in bytes) is returned.</li>
-<li><code>[in] bufsize</code>: Size of the destination buffer.</li>
-<li><code>[out] result</code>: Number of bytes copied into the buffer including the null.
-terminator. If the buffer size is insufficient, the string will be truncated
-including a null terminator.</li>
+<li><code>[in] bufsize</code>: Size of the destination buffer. When this value is
+insufficient, the returned string will be truncated.</li>
+<li><code>[out] result</code>: Number of bytes copied into the buffer, excluding the null
+terminator.</li>
 </ul>
-<p>Returns <code>napi_ok</code> if the API succeeded. Ifa non-String <code>napi_value</code>
-x is passed in it returns <code>napi_string_expected</code>.</p>
+<p>Returns <code>napi_ok</code> if the API succeeded. If a non-String <code>napi_value</code>
+is passed in it returns <code>napi_string_expected</code>.</p>
 <p>This API returns the UTF8-encoded string corresponding the value passed in.</p>
 <h4><em>napi_get_value_string_utf16</em><span><a class="mark" href="#n_api_napi_get_value_string_utf16" id="n_api_napi_get_value_string_utf16">#</a></span></h4>
 <div class="api_metadata">
@@ -1782,10 +1836,10 @@ x is passed in it returns <code>napi_string_expected</code>.</p>
 <li><code>[in] value</code>: <code>napi_value</code> representing JavaScript string.</li>
 <li><code>[in] buf</code>: Buffer to write the UTF16-LE-encoded string into. If NULL is
 passed in, the length of the string (in 2-byte code units) is returned.</li>
-<li><code>[in] bufsize</code>: Size of the destination buffer.</li>
-<li><code>[out] result</code>: Number of 2-byte code units copied into the buffer including
-the null terminateor. If the buffer size is insufficient, the string will be
-truncated including a null terminator.</li>
+<li><code>[in] bufsize</code>: Size of the destination buffer. When this value is
+insufficient, the returned string will be truncated.</li>
+<li><code>[out] result</code>: Number of 2-byte code units copied into the buffer, excluding the null
+terminator.</li>
 </ul>
 <p>Returns <code>napi_ok</code> if the API succeeded. If a non-String <code>napi_value</code>
 is passed in it returns <code>napi_string_expected</code>.</p>
@@ -2619,7 +2673,7 @@ void Init(napi_env env, napi_value exports, napi_value module, void* priv) {
   if (status != napi_ok) return;
 }
 
-NAPI_MODULE(addon, Init)
+NAPI_MODULE(NODE_GYP_MODULE_NAME, Init)
 </code></pre>
 <p>Given the above code, the add-on can be used from JavaScript as follows:</p>
 <pre><code class="lang-js">const myaddon = require(&#39;./addon&#39;);
@@ -2860,7 +2914,9 @@ Afterward, additional manipulation of the wrapper&#39;s prototype chain may caus
 <code>napi_unwrap()</code> to fail.</p>
 <p><em>Note</em>: Calling <code>napi_wrap()</code> a second time on an object that already has a
 native instance associated with it by virtue of a previous call to
-<code>napi_wrap()</code> will cause an error to be returned.</p>
+<code>napi_wrap()</code> will cause an error to be returned. If you wish to associate
+another native instance with the given object, call <code>napi_remove_wrap()</code> on it
+first.</p>
 <h3><em>napi_unwrap</em><span><a class="mark" href="#n_api_napi_unwrap" id="n_api_napi_unwrap">#</a></span></h3>
 <div class="api_metadata">
 <span>Added in: v8.0.0</span>
@@ -2870,8 +2926,8 @@ native instance associated with it by virtue of a previous call to
 </code></pre>
 <ul>
 <li><code>[in] env</code>: The environment that the API is invoked under.</li>
-<li><code>[in] js_object</code>: The object associated with the C++ class instance.</li>
-<li><code>[out] result</code>: Pointer to the wrapped C++ class instance.</li>
+<li><code>[in] js_object</code>: The object associated with the native instance.</li>
+<li><code>[out] result</code>: Pointer to the wrapped native instance.</li>
 </ul>
 <p>Returns <code>napi_ok</code> if the API succeeded.</p>
 <p>Retrieves a native instance that was previously wrapped in a JavaScript
@@ -2881,6 +2937,24 @@ corresponding <code>napi_callback</code> is invoked. If the callback is for an i
 method or accessor, then the <code>this</code> argument to the callback is the wrapper
 object; the wrapped C++ instance that is the target of the call can be obtained
 then by calling <code>napi_unwrap()</code> on the wrapper object.</p>
+<h3><em>napi_remove_wrap</em><span><a class="mark" href="#n_api_napi_remove_wrap" id="n_api_napi_remove_wrap">#</a></span></h3>
+<div class="api_metadata">
+<span>Added in: v8.5.0</span>
+</div><pre><code class="lang-C">napi_status napi_remove_wrap(napi_env env,
+                             napi_value js_object,
+                             void** result);
+</code></pre>
+<ul>
+<li><code>[in] env</code>: The environment that the API is invoked under.</li>
+<li><code>[in] js_object</code>: The object associated with the native instance.</li>
+<li><code>[out] result</code>: Pointer to the wrapped native instance.</li>
+</ul>
+<p>Returns <code>napi_ok</code> if the API succeeded.</p>
+<p>Retrieves a native instance that was previously wrapped in the JavaScript
+object <code>js_object</code> using <code>napi_wrap()</code> and removes the wrapping, thereby
+restoring the JavaScript object&#39;s prototype chain. If a finalize callback was
+associated with the wrapping, it will no longer be called when the JavaScript
+object becomes garbage-collected.</p>
 <h2>Asynchronous Operations<span><a class="mark" href="#n_api_asynchronous_operations" id="n_api_asynchronous_operations">#</a></span></h2>
 <p>Addon modules often need to leverage async helpers from libuv as part of their
 implementation. This allows them to schedule work to be executed asynchronously
@@ -3031,8 +3105,158 @@ support it:</p>
 <li>If the function is not available, provide an alternate implementation
 that does not use the function.</li>
 </ul>
+<h2>Memory Management<span><a class="mark" href="#n_api_memory_management" id="n_api_memory_management">#</a></span></h2>
+<h3>napi_adjust_external_memory<span><a class="mark" href="#n_api_napi_adjust_external_memory" id="n_api_napi_adjust_external_memory">#</a></span></h3>
+<div class="api_metadata">
+<span>Added in: v8.5.0</span>
+</div><pre><code class="lang-C">NAPI_EXTERN napi_status napi_adjust_external_memory(napi_env env,
+                                                    int64_t change_in_bytes,
+                                                    int64_t* result);
+</code></pre>
+<ul>
+<li><code>[in] env</code>: The environment that the API is invoked under.</li>
+<li><code>[in] change_in_bytes</code>: The change in externally allocated memory that is
+kept alive by JavaScript objects.</li>
+<li><code>[out] result</code>: The adjusted value</li>
+</ul>
+<p>Returns <code>napi_ok</code> if the API succeeded.</p>
+<p>This function gives V8 an indication of the amount of externally allocated
+memory that is kept alive by JavaScript objects (i.e. a JavaScript object
+that points to its own memory allocated by a native module). Registering
+externally allocated memory will trigger global garbage collections more
+often than it would otherwise.</p>
 <!-- it's very convenient to have all the anchors indexed -->
 <!--lint disable no-unused-definitions remark-lint-->
+<h2>Promises<span><a class="mark" href="#n_api_promises" id="n_api_promises">#</a></span></h2>
+<p>N-API provides facilities for creating <code>Promise</code> objects as described in
+<a href="https://tc39.github.io/ecma262/#sec-promise-objects">Section 25.4</a> of the ECMA specification. It implements promises as a pair of
+objects. When a promise is created by <code>napi_create_promise()</code>, a &quot;deferred&quot;
+object is created and returned alongside the <code>Promise</code>. The deferred object is
+bound to the created <code>Promise</code> and is the only means to resolve or reject the
+<code>Promise</code> using <code>napi_resolve_deferred()</code> or <code>napi_reject_deferred()</code>. The
+deferred object that is created by <code>napi_create_promise()</code> is freed by
+<code>napi_resolve_deferred()</code> or <code>napi_reject_deferred()</code>. The <code>Promise</code> object may
+be returned to JavaScript where it can be used in the usual fashion.</p>
+<p>For example, to create a promise and pass it to an asynchronous worker:</p>
+<pre><code class="lang-c">napi_deferred deferred;
+napi_value promise;
+napi_status status;
+
+// Create the promise.
+status = napi_create_promise(env, &amp;deferred, &amp;promise);
+if (status != napi_ok) return NULL;
+
+// Pass the deferred to a function that performs an asynchronous action.
+do_something_asynchronous(deferred);
+
+// Return the promise to JS
+return promise;
+</code></pre>
+<p>The above function <code>do_something_asynchronous()</code> would perform its asynchronous
+action and then it would resolve or reject the deferred, thereby concluding the
+promise and freeing the deferred:</p>
+<pre><code class="lang-c">napi_deferred deferred;
+napi_value undefined;
+napi_status status;
+
+// Create a value with which to conclude the deferred.
+status = napi_get_undefined(env, &amp;undefined);
+if (status != napi_ok) return NULL;
+
+// Resolve or reject the promise associated with the deferred depending on
+// whether the asynchronous action succeeded.
+if (asynchronous_action_succeeded) {
+  status = napi_resolve_deferred(env, deferred, undefined);
+} else {
+  status = napi_reject_deferred(env, deferred, undefined);
+}
+if (status != napi_ok) return NULL;
+
+// At this point the deferred has been freed, so we should assign NULL to it.
+deferred = NULL;
+</code></pre>
+<h3>napi_create_promise<span><a class="mark" href="#n_api_napi_create_promise" id="n_api_napi_create_promise">#</a></span></h3>
+<div class="api_metadata">
+<span>Added in: v8.5.0</span>
+</div><pre><code class="lang-C">NAPI_EXTERN napi_status napi_create_promise(napi_env env,
+                                            napi_deferred* deferred,
+                                            napi_value* promise);
+</code></pre>
+<ul>
+<li><code>[in] env</code>: The environment that the API is invoked under.</li>
+<li><code>[out] deferred</code>: A newly created deferred object which can later be passed to
+<code>napi_resolve_deferred()</code> or <code>napi_reject_deferred()</code> to resolve resp. reject
+the associated promise.</li>
+<li><code>[out] promise</code>: The JavaScript promise associated with the deferred object.</li>
+</ul>
+<p>Returns <code>napi_ok</code> if the API succeeded.</p>
+<p>This API creates a deferred object and a JavaScript promise.</p>
+<h3>napi_resolve_deferred<span><a class="mark" href="#n_api_napi_resolve_deferred" id="n_api_napi_resolve_deferred">#</a></span></h3>
+<div class="api_metadata">
+<span>Added in: v8.5.0</span>
+</div><pre><code class="lang-C">NAPI_EXTERN napi_status napi_resolve_deferred(napi_env env,
+                                              napi_deferred deferred,
+                                              napi_value resolution);
+</code></pre>
+<ul>
+<li><code>[in] env</code>: The environment that the API is invoked under.</li>
+<li><code>[in] deferred</code>: The deferred object whose associated promise to resolve.</li>
+<li><code>[in] resolution</code>: The value with which to resolve the promise.</li>
+</ul>
+<p>This API resolves a JavaScript promise by way of the deferred object
+with which it is associated. Thus, it can only be used to resolve JavaScript
+promises for which the corresponding deferred object is available. This
+effectively means that the promise must have been created using
+<code>napi_create_promise()</code> and the deferred object returned from that call must
+have been retained in order to be passed to this API.</p>
+<p>The deferred object is freed upon successful completion.</p>
+<h3>napi_reject_deferred<span><a class="mark" href="#n_api_napi_reject_deferred" id="n_api_napi_reject_deferred">#</a></span></h3>
+<div class="api_metadata">
+<span>Added in: v8.5.0</span>
+</div><pre><code class="lang-C">NAPI_EXTERN napi_status napi_reject_deferred(napi_env env,
+                                             napi_deferred deferred,
+                                             napi_value rejection);
+</code></pre>
+<ul>
+<li><code>[in] env</code>: The environment that the API is invoked under.</li>
+<li><code>[in] deferred</code>: The deferred object whose associated promise to resolve.</li>
+<li><code>[in] rejection</code>: The value with which to reject the promise.</li>
+</ul>
+<p>This API rejects a JavaScript promise by way of the deferred object
+with which it is associated. Thus, it can only be used to reject JavaScript
+promises for which the corresponding deferred object is available. This
+effectively means that the promise must have been created using
+<code>napi_create_promise()</code> and the deferred object returned from that call must
+have been retained in order to be passed to this API.</p>
+<p>The deferred object is freed upon successful completion.</p>
+<h3>napi_is_promise<span><a class="mark" href="#n_api_napi_is_promise" id="n_api_napi_is_promise">#</a></span></h3>
+<div class="api_metadata">
+<span>Added in: v8.5.0</span>
+</div><pre><code class="lang-C">NAPI_EXTERN napi_status napi_is_promise(napi_env env,
+                                        napi_value promise,
+                                        bool* is_promise);
+</code></pre>
+<ul>
+<li><code>[in] env</code>: The environment that the API is invoked under.</li>
+<li><code>[in] promise</code>: The promise to examine</li>
+<li><code>[out] is_promise</code>: Flag indicating whether <code>promise</code> is a native promise
+object - that is, a promise object created by the underlying engine.</li>
+</ul>
+<h2>Script execution<span><a class="mark" href="#n_api_script_execution" id="n_api_script_execution">#</a></span></h2>
+<p>N-API provides an API for executing a string containing JavaScript using the
+underlying JavaScript engine.</p>
+<h3>napi_run_script<span><a class="mark" href="#n_api_napi_run_script" id="n_api_napi_run_script">#</a></span></h3>
+<div class="api_metadata">
+<span>Added in: v8.5.0</span>
+</div><pre><code class="lang-C">NAPI_EXTERN napi_status napi_run_script(napi_env env,
+                                        napi_value script,
+                                        napi_value* result);
+</code></pre>
+<ul>
+<li><code>[in] env</code>: The environment that the API is invoked under.</li>
+<li><code>[in] script</code>: A JavaScript string containing the script to execute.</li>
+<li><code>[out] result</code>: The value resulting from having executed the script.</li>
+</ul>
 
       </div>
     </div>

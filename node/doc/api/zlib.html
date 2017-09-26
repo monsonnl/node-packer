@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Zlib | Node.js v8.4.0 Documentation</title>
+  <title>Zlib | Node.js v8.5.0 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/sh.css">
@@ -37,6 +37,7 @@
 <li><a class="nav-deprecations" href="deprecations.html">Deprecated APIs</a></li>
 <li><a class="nav-dns" href="dns.html">DNS</a></li>
 <li><a class="nav-domain" href="domain.html">Domain</a></li>
+<li><a class="nav-esm" href="esm.html">ECMAScript Modules</a></li>
 <li><a class="nav-errors" href="errors.html">Errors</a></li>
 <li><a class="nav-events" href="events.html">Events</a></li>
 <li><a class="nav-fs" href="fs.html">File System</a></li>
@@ -50,6 +51,7 @@
 <li><a class="nav-net" href="net.html">Net</a></li>
 <li><a class="nav-os" href="os.html">OS</a></li>
 <li><a class="nav-path" href="path.html">Path</a></li>
+<li><a class="nav-perf_hooks" href="perf_hooks.html">Performance Hooks</a></li>
 <li><a class="nav-process" href="process.html">Process</a></li>
 <li><a class="nav-punycode" href="punycode.html">Punycode</a></li>
 <li><a class="nav-querystring" href="querystring.html">Query Strings</a></li>
@@ -79,13 +81,29 @@
 
     <div id="column1" data-id="zlib" class="interior">
       <header>
-        <h1>Node.js v8.4.0 Documentation</h1>
+        <h1>Node.js v8.5.0 Documentation</h1>
         <div id="gtoc">
-          <p>
-            <a href="index.html" name="toc">Index</a> |
-            <a href="all.html">View on single page</a> |
-            <a href="zlib.json">View as JSON</a>
-          </p>
+          <ul>
+            <li>
+              <a href="index.html" name="toc">Index</a> |
+            </li>
+            <li>
+              <a href="all.html">View on single page</a> |
+            </li>
+            <li>
+              <a href="zlib.json">View as JSON</a> |
+            </li>
+            <li class="version-picker">
+              <a href="#">View another version <span>&#x25bc;</span></a>
+              <ol class="version-picker"><li><a href="https://nodejs.org/docs/latest-v8.x/api/zlib.html">8.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v7.x/api/zlib.html">7.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v6.x/api/zlib.html">6.x <b>LTS</b></a></li>
+<li><a href="https://nodejs.org/docs/latest-v5.x/api/zlib.html">5.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v4.x/api/zlib.html">4.x <b>LTS</b></a></li>
+<li><a href="https://nodejs.org/docs/latest-v0.12.x/api/zlib.html">0.12.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v0.10.x/api/zlib.html">0.10.x</a></li></ol>
+            </li>
+          </ul>
         </div>
         <hr>
       </header>
@@ -94,6 +112,7 @@
         <h2>Table of Contents</h2>
         <ul>
 <li><span class="stability_2"><a href="#zlib_zlib">Zlib</a></span><ul>
+<li><span class="stability_undefined"><a href="#zlib_threadpool_usage">Threadpool Usage</a></span></li>
 <li><span class="stability_undefined"><a href="#zlib_compressing_http_requests_and_responses">Compressing HTTP requests and responses</a></span></li>
 <li><span class="stability_undefined"><a href="#zlib_memory_usage_tuning">Memory Usage Tuning</a></span></li>
 <li><span class="stability_undefined"><a href="#zlib_flushing">Flushing</a></span></li>
@@ -146,7 +165,8 @@
 
       <div id="apicontent">
         <h1>Zlib<span><a class="mark" href="#zlib_zlib" id="zlib_zlib">#</a></span></h1>
-<pre class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</pre><p>The <code>zlib</code> module provides compression functionality implemented using Gzip and
+<!--introduced_in=v0.10.0-->
+<div class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</div><p>The <code>zlib</code> module provides compression functionality implemented using Gzip and
 Deflate/Inflate. It can be accessed using:</p>
 <pre><code class="lang-js">const zlib = require(&#39;zlib&#39;);
 </code></pre>
@@ -178,6 +198,11 @@ zlib.unzip(buffer, (err, buffer) =&gt; {
   }
 });
 </code></pre>
+<h2>Threadpool Usage<span><a class="mark" href="#zlib_threadpool_usage" id="zlib_threadpool_usage">#</a></span></h2>
+<p>Note that all zlib APIs except those that are explicitly synchronous use libuv&#39;s
+threadpool, which can have surprising and negative performance implications for
+some applications, see the [<code>UV_THREADPOOL_SIZE</code>][] documentation for more
+information.</p>
 <h2>Compressing HTTP requests and responses<span><a class="mark" href="#zlib_compressing_http_requests_and_responses" id="zlib_compressing_http_requests_and_responses">#</a></span></h2>
 <p>The <code>zlib</code> module can be used to implement support for the <code>gzip</code> and <code>deflate</code>
 content-encoding mechanisms defined by

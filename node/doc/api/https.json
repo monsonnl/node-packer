@@ -4,6 +4,7 @@
     {
       "textRaw": "HTTPS",
       "name": "https",
+      "introduced_in": "v0.10.0",
       "stability": 2,
       "stabilityText": "Stable",
       "desc": "<p>HTTPS is the HTTP protocol over TLS/SSL. In Node.js this is implemented as a\nseparate module.</p>\n",

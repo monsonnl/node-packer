@@ -4,6 +4,7 @@
     {
       "textRaw": "UDP / Datagram Sockets",
       "name": "dgram",
+      "introduced_in": "v0.10.0",
       "stability": 2,
       "stabilityText": "Stable",
       "desc": "<p>The <code>dgram</code> module provides an implementation of UDP Datagram sockets.</p>\n<pre><code class=\"lang-js\">const dgram = require(&#39;dgram&#39;);\nconst server = dgram.createSocket(&#39;udp4&#39;);\n\nserver.on(&#39;error&#39;, (err) =&gt; {\n  console.log(`server error:\\n${err.stack}`);\n  server.close();\n});\n\nserver.on(&#39;message&#39;, (msg, rinfo) =&gt; {\n  console.log(`server got: ${msg} from ${rinfo.address}:${rinfo.port}`);\n});\n\nserver.on(&#39;listening&#39;, () =&gt; {\n  const address = server.address();\n  console.log(`server listening ${address.address}:${address.port}`);\n});\n\nserver.bind(41234);\n// server listening 0.0.0.0:41234\n</code></pre>\n",

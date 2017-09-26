@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>File System | Node.js v8.4.0 Documentation</title>
+  <title>File System | Node.js v8.5.0 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/sh.css">
@@ -37,6 +37,7 @@
 <li><a class="nav-deprecations" href="deprecations.html">Deprecated APIs</a></li>
 <li><a class="nav-dns" href="dns.html">DNS</a></li>
 <li><a class="nav-domain" href="domain.html">Domain</a></li>
+<li><a class="nav-esm" href="esm.html">ECMAScript Modules</a></li>
 <li><a class="nav-errors" href="errors.html">Errors</a></li>
 <li><a class="nav-events" href="events.html">Events</a></li>
 <li><a class="nav-fs active" href="fs.html">File System</a></li>
@@ -50,6 +51,7 @@
 <li><a class="nav-net" href="net.html">Net</a></li>
 <li><a class="nav-os" href="os.html">OS</a></li>
 <li><a class="nav-path" href="path.html">Path</a></li>
+<li><a class="nav-perf_hooks" href="perf_hooks.html">Performance Hooks</a></li>
 <li><a class="nav-process" href="process.html">Process</a></li>
 <li><a class="nav-punycode" href="punycode.html">Punycode</a></li>
 <li><a class="nav-querystring" href="querystring.html">Query Strings</a></li>
@@ -79,13 +81,29 @@
 
     <div id="column1" data-id="fs" class="interior">
       <header>
-        <h1>Node.js v8.4.0 Documentation</h1>
+        <h1>Node.js v8.5.0 Documentation</h1>
         <div id="gtoc">
-          <p>
-            <a href="index.html" name="toc">Index</a> |
-            <a href="all.html">View on single page</a> |
-            <a href="fs.json">View as JSON</a>
-          </p>
+          <ul>
+            <li>
+              <a href="index.html" name="toc">Index</a> |
+            </li>
+            <li>
+              <a href="all.html">View on single page</a> |
+            </li>
+            <li>
+              <a href="fs.json">View as JSON</a> |
+            </li>
+            <li class="version-picker">
+              <a href="#">View another version <span>&#x25bc;</span></a>
+              <ol class="version-picker"><li><a href="https://nodejs.org/docs/latest-v8.x/api/fs.html">8.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v7.x/api/fs.html">7.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v6.x/api/fs.html">6.x <b>LTS</b></a></li>
+<li><a href="https://nodejs.org/docs/latest-v5.x/api/fs.html">5.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v4.x/api/fs.html">4.x <b>LTS</b></a></li>
+<li><a href="https://nodejs.org/docs/latest-v0.12.x/api/fs.html">0.12.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v0.10.x/api/fs.html">0.10.x</a></li></ol>
+            </li>
+          </ul>
         </div>
         <hr>
       </header>
@@ -94,6 +112,7 @@
         <h2>Table of Contents</h2>
         <ul>
 <li><span class="stability_2"><a href="#fs_file_system">File System</a></span><ul>
+<li><span class="stability_undefined"><a href="#fs_threadpool_usage">Threadpool Usage</a></span></li>
 <li><span class="stability_1"><a href="#fs_whatwg_url_object_support">WHATWG URL object support</a></span></li>
 <li><span class="stability_undefined"><a href="#fs_buffer_api">Buffer API</a></span></li>
 <li><span class="stability_undefined"><a href="#fs_class_fs_fswatcher">Class: fs.FSWatcher</a></span><ul>
@@ -131,6 +150,8 @@
 <li><span class="stability_undefined"><a href="#fs_fs_close_fd_callback">fs.close(fd, callback)</a></span></li>
 <li><span class="stability_undefined"><a href="#fs_fs_closesync_fd">fs.closeSync(fd)</a></span></li>
 <li><span class="stability_undefined"><a href="#fs_fs_constants">fs.constants</a></span></li>
+<li><span class="stability_undefined"><a href="#fs_fs_copyfile_src_dest_flags_callback">fs.copyFile(src, dest[, flags], callback)</a></span></li>
+<li><span class="stability_undefined"><a href="#fs_fs_copyfilesync_src_dest_flags">fs.copyFileSync(src, dest[, flags])</a></span></li>
 <li><span class="stability_undefined"><a href="#fs_fs_createreadstream_path_options">fs.createReadStream(path[, options])</a></span></li>
 <li><span class="stability_undefined"><a href="#fs_fs_createwritestream_path_options">fs.createWriteStream(path[, options])</a></span></li>
 <li><span class="stability_0"><a href="#fs_fs_exists_path_callback">fs.exists(path, callback)</a></span></li>
@@ -219,7 +240,8 @@
 
       <div id="apicontent">
         <h1>File System<span><a class="mark" href="#fs_file_system" id="fs_file_system">#</a></span></h1>
-<pre class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</pre><!--name=fs-->
+<!--introduced_in=v0.10.0-->
+<div class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</div><!--name=fs-->
 <p>File I/O is provided by simple wrappers around standard POSIX functions.  To
 use this module do <code>require(&#39;fs&#39;)</code>. All the methods have asynchronous and
 synchronous forms.</p>
@@ -294,10 +316,15 @@ This behavior can be observed when using a drive path without a backslash. For
 example <code>fs.readdirSync(&#39;c:\\&#39;)</code> can potentially return a different result than
 <code>fs.readdirSync(&#39;c:&#39;)</code>. For more information, see
 <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247.aspx#fully_qualified_vs._relative_paths">this MSDN page</a>.</p>
+<h2>Threadpool Usage<span><a class="mark" href="#fs_threadpool_usage" id="fs_threadpool_usage">#</a></span></h2>
+<p>Note that all file system APIs except <code>fs.FSWatcher()</code> and those that are
+explicitly synchronous use libuv&#39;s threadpool, which can have surprising and
+negative performance implications for some applications, see the
+<a href="cli.html#cli_uv_threadpool_size_size"><code>UV_THREADPOOL_SIZE</code></a> documentation for more information.</p>
 <h2>WHATWG URL object support<span><a class="mark" href="#fs_whatwg_url_object_support" id="fs_whatwg_url_object_support">#</a></span></h2>
 <div class="api_metadata">
 <span>Added in: v7.6.0</span>
-</div><pre class="api_stability api_stability_1"><a href="documentation.html#documentation_stability_index">Stability: 1</a> - Experimental</pre><p>For most <code>fs</code> module functions, the <code>path</code> or <code>filename</code> argument may be passed
+</div><div class="api_stability api_stability_1"><a href="documentation.html#documentation_stability_index">Stability: 1</a> - Experimental</div><p>For most <code>fs</code> module functions, the <code>path</code> or <code>filename</code> argument may be passed
 as a WHATWG <a href="url.html#url_the_whatwg_url_api"><code>URL</code></a> object. Only <a href="url.html#url_the_whatwg_url_api"><code>URL</code></a> objects using the <code>file:</code> protocol
 are supported.</p>
 <pre><code class="lang-js">const fs = require(&#39;fs&#39;);
@@ -859,6 +886,70 @@ to the completion callback.</p>
 <p>Returns an object containing commonly used constants for file system
 operations. The specific constants currently defined are described in
 <a href="#fs_fs_constants_1">FS Constants</a>.</p>
+<h2>fs.copyFile(src, dest[, flags], callback)<span><a class="mark" href="#fs_fs_copyfile_src_dest_flags_callback" id="fs_fs_copyfile_src_dest_flags_callback">#</a></span></h2>
+<div class="api_metadata">
+<span>Added in: v8.5.0</span>
+</div><ul>
+<li><code>src</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> | <a href="buffer.html#buffer_class_buffer" class="type">&lt;Buffer&gt;</a> | <a href="url.html#url_the_whatwg_url_api" class="type">&lt;URL&gt;</a> source filename to copy</li>
+<li><code>dest</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> | <a href="buffer.html#buffer_class_buffer" class="type">&lt;Buffer&gt;</a> | <a href="url.html#url_the_whatwg_url_api" class="type">&lt;URL&gt;</a> destination filename of the copy operation</li>
+<li><code>flags</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> modifiers for copy operation. <strong>Default:</strong> <code>0</code></li>
+<li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a></li>
+</ul>
+<p>Asynchronously copies <code>src</code> to <code>dest</code>. By default, <code>dest</code> is overwritten if it
+already exists. No arguments other than a possible exception are given to the
+callback function. Node.js makes no guarantees about the atomicity of the copy
+operation. If an error occurs after the destination file has been opened for
+writing, Node.js will attempt to remove the destination.</p>
+<p><code>flags</code> is an optional integer that specifies the behavior
+of the copy operation. The only supported flag is <code>fs.constants.COPYFILE_EXCL</code>,
+which causes the copy operation to fail if <code>dest</code> already exists.</p>
+<p>Example:</p>
+<pre><code class="lang-js">const fs = require(&#39;fs&#39;);
+
+// destination.txt will be created or overwritten by default.
+fs.copyFile(&#39;source.txt&#39;, &#39;destination.txt&#39;, (err) =&gt; {
+  if (err) throw err;
+  console.log(&#39;source.txt was copied to destination.txt&#39;);
+});
+</code></pre>
+<p>If the third argument is a number, then it specifies <code>flags</code>, as shown in the
+following example.</p>
+<pre><code class="lang-js">const fs = require(&#39;fs&#39;);
+const { COPYFILE_EXCL } = fs.constants;
+
+// By using COPYFILE_EXCL, the operation will fail if destination.txt exists.
+fs.copyFile(&#39;source.txt&#39;, &#39;destination.txt&#39;, COPYFILE_EXCL, callback);
+</code></pre>
+<h2>fs.copyFileSync(src, dest[, flags])<span><a class="mark" href="#fs_fs_copyfilesync_src_dest_flags" id="fs_fs_copyfilesync_src_dest_flags">#</a></span></h2>
+<div class="api_metadata">
+<span>Added in: v8.5.0</span>
+</div><ul>
+<li><code>src</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> | <a href="buffer.html#buffer_class_buffer" class="type">&lt;Buffer&gt;</a> | <a href="url.html#url_the_whatwg_url_api" class="type">&lt;URL&gt;</a> source filename to copy</li>
+<li><code>dest</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> | <a href="buffer.html#buffer_class_buffer" class="type">&lt;Buffer&gt;</a> | <a href="url.html#url_the_whatwg_url_api" class="type">&lt;URL&gt;</a> destination filename of the copy operation</li>
+<li><code>flags</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> modifiers for copy operation. <strong>Default:</strong> <code>0</code></li>
+</ul>
+<p>Synchronously copies <code>src</code> to <code>dest</code>. By default, <code>dest</code> is overwritten if it
+already exists. Returns <code>undefined</code>. Node.js makes no guarantees about the
+atomicity of the copy operation. If an error occurs after the destination file
+has been opened for writing, Node.js will attempt to remove the destination.</p>
+<p><code>flags</code> is an optional integer that specifies the behavior
+of the copy operation. The only supported flag is <code>fs.constants.COPYFILE_EXCL</code>,
+which causes the copy operation to fail if <code>dest</code> already exists.</p>
+<p>Example:</p>
+<pre><code class="lang-js">const fs = require(&#39;fs&#39;);
+
+// destination.txt will be created or overwritten by default.
+fs.copyFileSync(&#39;source.txt&#39;, &#39;destination.txt&#39;);
+console.log(&#39;source.txt was copied to destination.txt&#39;);
+</code></pre>
+<p>If the third argument is a number, then it specifies <code>flags</code>, as shown in the
+following example.</p>
+<pre><code class="lang-js">const fs = require(&#39;fs&#39;);
+const { COPYFILE_EXCL } = fs.constants;
+
+// By using COPYFILE_EXCL, the operation will fail if destination.txt exists.
+fs.copyFileSync(&#39;source.txt&#39;, &#39;destination.txt&#39;, COPYFILE_EXCL);
+</code></pre>
 <h2>fs.createReadStream(path[, options])<span><a class="mark" href="#fs_fs_createreadstream_path_options" id="fs_fs_createreadstream_path_options">#</a></span></h2>
 <div class="api_metadata">
 <details class="changelog"><summary>History</summary>
@@ -950,7 +1041,7 @@ file was created.</p>
 <li><code>path</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> | <a href="buffer.html#buffer_class_buffer" class="type">&lt;Buffer&gt;</a> | <a href="url.html#url_the_whatwg_url_api" class="type">&lt;URL&gt;</a></li>
 <li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a><ul>
 <li><code>flags</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a></li>
-<li><code>defaultEncoding</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a></li>
+<li><code>encoding</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a></li>
 <li><code>fd</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;integer&gt;</a></li>
 <li><code>mode</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;integer&gt;</a></li>
 <li><code>autoClose</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type" class="type">&lt;boolean&gt;</a></li>
@@ -962,7 +1053,7 @@ file was created.</p>
 <p><code>options</code> is an object or string with the following defaults:</p>
 <pre><code class="lang-js">const defaults = {
   flags: &#39;w&#39;,
-  defaultEncoding: &#39;utf8&#39;,
+  encoding: &#39;utf8&#39;,
   fd: null,
   mode: 0o666,
   autoClose: true
@@ -971,7 +1062,7 @@ file was created.</p>
 <p><code>options</code> may also include a <code>start</code> option to allow writing data at
 some position past the beginning of the file.  Modifying a file rather
 than replacing it may require a <code>flags</code> mode of <code>r+</code> rather than the
-default mode <code>w</code>. The <code>defaultEncoding</code> can be any one of those accepted by
+default mode <code>w</code>. The <code>encoding</code> can be any one of those accepted by
 <a href="buffer.html#buffer_buffer"><code>Buffer</code></a>.</p>
 <p>If <code>autoClose</code> is set to true (default behavior) on <code>error</code> or <code>end</code>
 the file descriptor will be closed automatically. If <code>autoClose</code> is false,
@@ -999,7 +1090,7 @@ file descriptor leak.</p>
 </td></tr>
 </table>
 </details>
-</div><pre class="api_stability api_stability_0"><a href="documentation.html#documentation_stability_index">Stability: 0</a> - Deprecated: Use <a href="#fs_fs_stat_path_callback"><code>fs.stat()</code></a> or <a href="#fs_fs_access_path_mode_callback"><code>fs.access()</code></a> instead.</pre><ul>
+</div><div class="api_stability api_stability_0"><a href="documentation.html#documentation_stability_index">Stability: 0</a> - Deprecated: Use <a href="#fs_fs_stat_path_callback"><code>fs.stat()</code></a> or <a href="#fs_fs_access_path_mode_callback"><code>fs.access()</code></a> instead.</div><ul>
 <li><code>path</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> | <a href="buffer.html#buffer_class_buffer" class="type">&lt;Buffer&gt;</a> | <a href="url.html#url_the_whatwg_url_api" class="type">&lt;URL&gt;</a></li>
 <li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a></li>
 </ul>

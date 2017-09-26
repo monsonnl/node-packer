@@ -4,6 +4,7 @@
     {
       "textRaw": "TTY",
       "name": "tty",
+      "introduced_in": "v0.10.0",
       "stability": 2,
       "stabilityText": "Stable",
       "desc": "<p>The <code>tty</code> module provides the <code>tty.ReadStream</code> and <code>tty.WriteStream</code> classes.\nIn most cases, it will not be necessary or possible to use this module directly.\nHowever, it can be accessed using:</p>\n<pre><code class=\"lang-js\">const tty = require(&#39;tty&#39;);\n</code></pre>\n<p>When Node.js detects that it is being run inside a text terminal (&quot;TTY&quot;)\ncontext, the <code>process.stdin</code> will, by default, be initialized as an instance of\n<code>tty.ReadStream</code> and both <code>process.stdout</code> and <code>process.stderr</code> will, by\ndefault be instances of <code>tty.WriteStream</code>. The preferred method of determining\nwhether Node.js is being run within a TTY context is to check that the value of\nthe <code>process.stdout.isTTY</code> property is <code>true</code>:</p>\n<pre><code class=\"lang-sh\">$ node -p -e &quot;Boolean(process.stdout.isTTY)&quot;\ntrue\n$ node -p -e &quot;Boolean(process.stdout.isTTY)&quot; | cat\nfalse\n</code></pre>\n<p>In most cases, there should be little to no reason for an application to\ncreate instances of the <code>tty.ReadStream</code> and <code>tty.WriteStream</code> classes.</p>\n",

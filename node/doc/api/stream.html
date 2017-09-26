@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Stream | Node.js v8.4.0 Documentation</title>
+  <title>Stream | Node.js v8.5.0 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/sh.css">
@@ -37,6 +37,7 @@
 <li><a class="nav-deprecations" href="deprecations.html">Deprecated APIs</a></li>
 <li><a class="nav-dns" href="dns.html">DNS</a></li>
 <li><a class="nav-domain" href="domain.html">Domain</a></li>
+<li><a class="nav-esm" href="esm.html">ECMAScript Modules</a></li>
 <li><a class="nav-errors" href="errors.html">Errors</a></li>
 <li><a class="nav-events" href="events.html">Events</a></li>
 <li><a class="nav-fs" href="fs.html">File System</a></li>
@@ -50,6 +51,7 @@
 <li><a class="nav-net" href="net.html">Net</a></li>
 <li><a class="nav-os" href="os.html">OS</a></li>
 <li><a class="nav-path" href="path.html">Path</a></li>
+<li><a class="nav-perf_hooks" href="perf_hooks.html">Performance Hooks</a></li>
 <li><a class="nav-process" href="process.html">Process</a></li>
 <li><a class="nav-punycode" href="punycode.html">Punycode</a></li>
 <li><a class="nav-querystring" href="querystring.html">Query Strings</a></li>
@@ -79,13 +81,29 @@
 
     <div id="column1" data-id="stream" class="interior">
       <header>
-        <h1>Node.js v8.4.0 Documentation</h1>
+        <h1>Node.js v8.5.0 Documentation</h1>
         <div id="gtoc">
-          <p>
-            <a href="index.html" name="toc">Index</a> |
-            <a href="all.html">View on single page</a> |
-            <a href="stream.json">View as JSON</a>
-          </p>
+          <ul>
+            <li>
+              <a href="index.html" name="toc">Index</a> |
+            </li>
+            <li>
+              <a href="all.html">View on single page</a> |
+            </li>
+            <li>
+              <a href="stream.json">View as JSON</a> |
+            </li>
+            <li class="version-picker">
+              <a href="#">View another version <span>&#x25bc;</span></a>
+              <ol class="version-picker"><li><a href="https://nodejs.org/docs/latest-v8.x/api/stream.html">8.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v7.x/api/stream.html">7.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v6.x/api/stream.html">6.x <b>LTS</b></a></li>
+<li><a href="https://nodejs.org/docs/latest-v5.x/api/stream.html">5.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v4.x/api/stream.html">4.x <b>LTS</b></a></li>
+<li><a href="https://nodejs.org/docs/latest-v0.12.x/api/stream.html">0.12.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v0.10.x/api/stream.html">0.10.x</a></li></ol>
+            </li>
+          </ul>
         </div>
         <hr>
       </header>
@@ -193,6 +211,7 @@
 <li><span class="stability_undefined"><a href="#stream_compatibility_with_older_node_js_versions">Compatibility with Older Node.js Versions</a></span></li>
 <li><span class="stability_undefined"><a href="#stream_readable_read_0"><code>readable.read(0)</code></a></span></li>
 <li><span class="stability_undefined"><a href="#stream_readable_push"><code>readable.push(&#39;&#39;)</code></a></span></li>
+<li><span class="stability_undefined"><a href="#stream_highwatermark_discrepency_after_calling_readable_setencoding"><code>highWaterMark</code> discrepency after calling <code>readable.setEncoding()</code></a></span></li>
 </ul>
 </li>
 </ul>
@@ -203,7 +222,8 @@
 
       <div id="apicontent">
         <h1>Stream<span><a class="mark" href="#stream_stream" id="stream_stream">#</a></span></h1>
-<pre class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</pre><p>A stream is an abstract interface for working with streaming data in Node.js.
+<!--introduced_in=v0.10.0-->
+<div class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</div><p>A stream is an abstract interface for working with streaming data in Node.js.
 The <code>stream</code> module provides a base API that makes it easy to build objects
 that implement the stream interface.</p>
 <p>There are many stream objects provided by Node.js. For instance, a
@@ -251,8 +271,8 @@ buffer that can be retrieved using <code>writable._writableState.getBuffer()</co
 <code>readable._readableState.buffer</code>, respectively.</p>
 <p>The amount of data potentially buffered depends on the <code>highWaterMark</code> option
 passed into the streams constructor. For normal streams, the <code>highWaterMark</code>
-option specifies a total number of bytes. For streams operating in object mode,
-the <code>highWaterMark</code> specifies a total number of objects.</p>
+option specifies a <a href="#stream_highWaterMark_discrepency_after_calling_readable_setencoding">total number of bytes</a>. For streams operating
+in object mode, the <code>highWaterMark</code> specifies a total number of objects.</p>
 <p>Data is buffered in Readable streams when the implementation calls
 <a href="#stream_readable_push_chunk_encoding"><code>stream.push(chunk)</code></a>. If the consumer of the Stream does not
 call <a href="#stream_readable_read_size"><code>stream.read()</code></a>, the data will sit in the internal
@@ -936,7 +956,7 @@ in object mode.</p>
 <p>The optional <code>size</code> argument specifies a specific number of bytes to read. If
 <code>size</code> bytes are not available to be read, <code>null</code> will be returned <em>unless</em>
 the stream has ended, in which case all of the data remaining in the internal
-buffer will be returned (<em>even if it exceeds <code>size</code> bytes</em>).</p>
+buffer will be returned.</p>
 <p>If the <code>size</code> argument is not specified, all of the data contained in the
 internal buffer will be returned.</p>
 <p>The <code>readable.read()</code> method should only be called on Readable streams operating
@@ -1355,7 +1375,7 @@ resource.</p>
 <p><em>Note</em>: <a href="#stream_class_stream_transform">Transform</a> streams provide their own implementation of the
 <a href="#stream_writable_write_chunk_encoding_callback_1"><code>writable._write()</code></a>.</p>
 <p><em>Note</em>: This function MUST NOT be called by application code directly. It
-should be implemented by child classes, and called only by the internal Writable
+should be implemented by child classes, and called by the internal Writable
 class methods only.</p>
 <p>The <code>callback</code> method must be called to signal either that the write completed
 successfully or failed with an error. The first argument passed to the
@@ -1385,7 +1405,7 @@ format: <code>{ chunk: ..., encoding: ... }</code>.</li>
 argument) to be invoked when processing is complete for the supplied chunks.</li>
 </ul>
 </div><p><em>Note</em>: This function MUST NOT be called by application code directly. It
-should be implemented by child classes, and called only by the internal Writable
+should be implemented by child classes, and called by the internal Writable
 class methods only.</p>
 <p>The <code>writable._writev()</code> method may be implemented in addition to
 <code>writable._write()</code> in stream implementations that are capable of processing
@@ -1407,9 +1427,9 @@ which is invoked when the writable is destroyed.</li>
 <span>Added in: v8.0.0</span>
 </div><ul>
 <li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> Call this function (optionally with an error
-argument) when you are done writing any remaining data.</li>
+argument) when finished writing any remaining data.</li>
 </ul>
-<p>Note: <code>_final()</code> <strong>must not</strong> be called directly.  It MAY be implemented
+<p>The <code>_final()</code> method <strong>must not</strong> be called directly. It may be implemented
 by child classes, and if so, will be called by the internal Writable
 class methods only.</p>
 <p>This optional function will be called before the stream closes, delaying the
@@ -1464,9 +1484,9 @@ constructor and implement the <code>readable._read()</code> method.</p>
 <h4>new stream.Readable([options])<span><a class="mark" href="#stream_new_stream_readable_options" id="stream_new_stream_readable_options">#</a></span></h4>
 <div class="signature"><ul>
 <li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a><ul>
-<li><code>highWaterMark</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> The maximum number of bytes to store in
-the internal buffer before ceasing to read from the underlying
-resource. Defaults to <code>16384</code> (16kb), or <code>16</code> for <code>objectMode</code> streams</li>
+<li><code>highWaterMark</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> The maximum <a href="#stream_highWaterMark_discrepency_after_calling_readable_setencoding">number of bytes</a> to store
+in the internal buffer before ceasing to read from the underlying resource.
+Defaults to <code>16384</code> (16kb), or <code>16</code> for <code>objectMode</code> streams</li>
 <li><code>encoding</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> If specified, then buffers will be decoded to
 strings using the specified encoding. Defaults to <code>null</code></li>
 <li><code>objectMode</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type" class="type">&lt;boolean&gt;</a> Whether this stream should behave
@@ -1515,7 +1535,7 @@ const myReadable = new Readable({
 <li><code>size</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> Number of bytes to read asynchronously</li>
 </ul>
 </div><p><em>Note</em>: This function MUST NOT be called by application code directly. It
-should be implemented by child classes, and called only by the internal Readable
+should be implemented by child classes, and called by the internal Readable
 class methods only.</p>
 <p>All Readable stream implementations must provide an implementation of the
 <code>readable._read()</code> method to fetch data from the underlying resource.</p>
@@ -1863,7 +1883,7 @@ after all data has been output, which occurs after the callback in
 argument and data) to be called when remaining data has been flushed.</li>
 </ul>
 </div><p><em>Note</em>: This function MUST NOT be called by application code directly. It
-should be implemented by child classes, and called only by the internal Readable
+should be implemented by child classes, and called by the internal Readable
 class methods only.</p>
 <p>In some cases, a transform operation may need to emit an additional bit of
 data at the end of the stream. For example, a <code>zlib</code> compression stream will
@@ -1893,7 +1913,7 @@ argument and data) to be called after the supplied <code>chunk</code> has been
 processed.</li>
 </ul>
 </div><p><em>Note</em>: This function MUST NOT be called by application code directly. It
-should be implemented by child classes, and called only by the internal Readable
+should be implemented by child classes, and called by the internal Readable
 class methods only.</p>
 <p>All Transform stream implementations must provide a <code>_transform()</code>
 method to accept input and produce output. The <code>transform._transform()</code>
@@ -2007,6 +2027,15 @@ object mode has an interesting side effect. Because it <em>is</em> a call to
 <a href="#stream_readable_push_chunk_encoding"><code>readable.push()</code></a>, the call will end the reading process.
 However, because the argument is an empty string, no data is added to the
 readable buffer so there is nothing for a user to consume.</p>
+<h3><code>highWaterMark</code> discrepency after calling <code>readable.setEncoding()</code><span><a class="mark" href="#stream_highwatermark_discrepency_after_calling_readable_setencoding" id="stream_highwatermark_discrepency_after_calling_readable_setencoding">#</a></span></h3>
+<p>The use of <code>readable.setEncoding()</code> will change the behavior of how the
+<code>highWaterMark</code> operates in non-object mode.</p>
+<p>Typically, the size of the current buffer is measured against the
+<code>highWaterMark</code> in <em>bytes</em>. However, after <code>setEncoding()</code> is called, the
+comparison function will begin to measure the buffer&#39;s size in <em>characters</em>.</p>
+<p>This is not a problem in common cases with <code>latin1</code> or <code>ascii</code>. But it is
+advised to be mindful about this behavior when working with strings that could
+contain multi-byte characters.</p>
 
       </div>
     </div>

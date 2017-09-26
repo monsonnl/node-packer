@@ -4,6 +4,7 @@
     {
       "textRaw": "TLS (SSL)",
       "name": "tls_(ssl)",
+      "introduced_in": "v0.10.0",
       "stability": 2,
       "stabilityText": "Stable",
       "desc": "<p>The <code>tls</code> module provides an implementation of the Transport Layer Security\n(TLS) and Secure Socket Layer (SSL) protocols that is built on top of OpenSSL.\nThe module can be accessed using:</p>\n<pre><code class=\"lang-js\">const tls = require(&#39;tls&#39;);\n</code></pre>\n",
@@ -1317,10 +1318,10 @@
                   "textRaw": "`options` {Object} ",
                   "options": [
                     {
-                      "textRaw": "`pfx` {string|Buffer} Optional PFX or PKCS12 encoded private key and certificate chain. `pfx` is an alternative to providing `key` and `cert` individually. PFX is usually encrypted, if it is, `passphrase` will be used to decrypt it. ",
+                      "textRaw": "`pfx` {string|string[]|Buffer|Buffer[]|Object[]} Optional PFX or PKCS12 encoded private key and certificate chain. `pfx` is an alternative to providing `key` and `cert` individually. PFX is usually encrypted, if it is, `passphrase` will be used to decrypt it. Multiple PFX can be provided either as an array of unencrypted PFX buffers, or an array of objects in the form `{buf: <string|buffer>[, passphrase: <string>]}`. The object form can only occur in an array. `object.passphrase` is optional. Encrypted PFX will be decrypted with `object.passphrase` if provided, or `options.passphrase` if it is not. ",
                       "name": "pfx",
-                      "type": "string|Buffer",
-                      "desc": "Optional PFX or PKCS12 encoded private key and certificate chain. `pfx` is an alternative to providing `key` and `cert` individually. PFX is usually encrypted, if it is, `passphrase` will be used to decrypt it."
+                      "type": "string|string[]|Buffer|Buffer[]|Object[]",
+                      "desc": "Optional PFX or PKCS12 encoded private key and certificate chain. `pfx` is an alternative to providing `key` and `cert` individually. PFX is usually encrypted, if it is, `passphrase` will be used to decrypt it. Multiple PFX can be provided either as an array of unencrypted PFX buffers, or an array of objects in the form `{buf: <string|buffer>[, passphrase: <string>]}`. The object form can only occur in an array. `object.passphrase` is optional. Encrypted PFX will be decrypted with `object.passphrase` if provided, or `options.passphrase` if it is not."
                     },
                     {
                       "textRaw": "`key` {string|string[]|Buffer|Buffer[]|Object[]} Optional private keys in PEM format. PEM allows the option of private keys being encrypted. Encrypted keys will be decrypted with `options.passphrase`.  Multiple keys using different algorithms can be provided either as an array of unencrypted key strings or buffers, or an array of objects in the form `{pem: <string|buffer>[, passphrase: <string>]}`. The object form can only occur in an array. `object.passphrase` is optional. Encrypted keys will be decrypted with `object.passphrase` if provided, or `options.passphrase` if it is not. ",

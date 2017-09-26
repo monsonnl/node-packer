@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>HTTP | Node.js v8.4.0 Documentation</title>
+  <title>HTTP | Node.js v8.5.0 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/sh.css">
@@ -37,6 +37,7 @@
 <li><a class="nav-deprecations" href="deprecations.html">Deprecated APIs</a></li>
 <li><a class="nav-dns" href="dns.html">DNS</a></li>
 <li><a class="nav-domain" href="domain.html">Domain</a></li>
+<li><a class="nav-esm" href="esm.html">ECMAScript Modules</a></li>
 <li><a class="nav-errors" href="errors.html">Errors</a></li>
 <li><a class="nav-events" href="events.html">Events</a></li>
 <li><a class="nav-fs" href="fs.html">File System</a></li>
@@ -50,6 +51,7 @@
 <li><a class="nav-net" href="net.html">Net</a></li>
 <li><a class="nav-os" href="os.html">OS</a></li>
 <li><a class="nav-path" href="path.html">Path</a></li>
+<li><a class="nav-perf_hooks" href="perf_hooks.html">Performance Hooks</a></li>
 <li><a class="nav-process" href="process.html">Process</a></li>
 <li><a class="nav-punycode" href="punycode.html">Punycode</a></li>
 <li><a class="nav-querystring" href="querystring.html">Query Strings</a></li>
@@ -79,13 +81,29 @@
 
     <div id="column1" data-id="http" class="interior">
       <header>
-        <h1>Node.js v8.4.0 Documentation</h1>
+        <h1>Node.js v8.5.0 Documentation</h1>
         <div id="gtoc">
-          <p>
-            <a href="index.html" name="toc">Index</a> |
-            <a href="all.html">View on single page</a> |
-            <a href="http.json">View as JSON</a>
-          </p>
+          <ul>
+            <li>
+              <a href="index.html" name="toc">Index</a> |
+            </li>
+            <li>
+              <a href="all.html">View on single page</a> |
+            </li>
+            <li>
+              <a href="http.json">View as JSON</a> |
+            </li>
+            <li class="version-picker">
+              <a href="#">View another version <span>&#x25bc;</span></a>
+              <ol class="version-picker"><li><a href="https://nodejs.org/docs/latest-v8.x/api/http.html">8.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v7.x/api/http.html">7.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v6.x/api/http.html">6.x <b>LTS</b></a></li>
+<li><a href="https://nodejs.org/docs/latest-v5.x/api/http.html">5.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v4.x/api/http.html">4.x <b>LTS</b></a></li>
+<li><a href="https://nodejs.org/docs/latest-v0.12.x/api/http.html">0.12.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v0.10.x/api/http.html">0.10.x</a></li></ol>
+            </li>
+          </ul>
         </div>
         <hr>
       </header>
@@ -203,7 +221,8 @@
 
       <div id="apicontent">
         <h1>HTTP<span><a class="mark" href="#http_http" id="http_http">#</a></span></h1>
-<pre class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</pre><p>To use the HTTP server and client one must <code>require(&#39;http&#39;)</code>.</p>
+<!--introduced_in=v0.10.0-->
+<div class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</div><p>To use the HTTP server and client one must <code>require(&#39;http&#39;)</code>.</p>
 <p>The HTTP interfaces in Node.js are designed to support many features
 of the protocol which have been traditionally difficult to use.
 In particular, large, possibly chunk-encoded, messages. The interface is
@@ -258,9 +277,9 @@ to keep the Node.js process running when there are no outstanding requests.
 (see <a href="net.html#net_socket_unref">socket.unref()</a>).</p>
 <p>It is good practice, to <a href="#http_agent_destroy"><code>destroy()</code></a> an <code>Agent</code> instance when it is no
 longer in use, because unused sockets consume OS resources.</p>
-<p>Sockets are removed from an agent&#39;s pool when the socket emits either
+<p>Sockets are removed from an agent when the socket emits either
 a <code>&#39;close&#39;</code> event or an <code>&#39;agentRemove&#39;</code> event. When intending to keep one
-HTTP request open for a long time without keeping it in the pool, something
+HTTP request open for a long time without keeping it in the agent, something
 like the following may be done:</p>
 <pre><code class="lang-js">http.get(options, (res) =&gt; {
   // Do stuff
@@ -334,8 +353,9 @@ socket/stream from this function, or by passing the socket/stream to <code>callb
 </ul>
 <p>Called when <code>socket</code> is detached from a request and could be persisted by the
 Agent. Default behavior is to:</p>
-<pre><code class="lang-js">socket.unref();
-socket.setKeepAlive(agent.keepAliveMsecs);
+<pre><code class="lang-js">socket.setKeepAlive(true, this.keepAliveMsecs);
+socket.unref();
+return true;
 </code></pre>
 <p>This method can be overridden by a particular <code>Agent</code> subclass. If this
 method returns a falsy value, the socket will be destroyed instead of persisting
@@ -378,15 +398,16 @@ the agent when <code>keepAlive</code> is enabled.  Do not modify.</p>
 <li><code>port</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> Port of remote server</li>
 <li><code>localAddress</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> Local interface to bind for network connections
 when issuing the request</li>
+<li><code>family</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;integer&gt;</a> Must be 4 or 6 if this doesn&#39;t equal <code>undefined</code>.</li>
 </ul>
 </li>
 <li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a></li>
 </ul>
 <p>Get a unique name for a set of request options, to determine whether a
-connection can be reused.  For an HTTP agent, this returns
-<code>host:port:localAddress</code>.  For an HTTPS agent, the name includes the
-CA, cert, ciphers, and other HTTPS/TLS-specific options that determine
-socket reusability.</p>
+connection can be reused. For an HTTP agent, this returns
+<code>host:port:localAddress</code> or <code>host:port:localAddress:family</code>. For an HTTPS agent,
+the name includes the CA, cert, ciphers, and other HTTPS/TLS-specific options
+that determine socket reusability.</p>
 <h3>agent.maxFreeSockets<span><a class="mark" href="#http_agent_maxfreesockets" id="http_agent_maxfreesockets">#</a></span></h3>
 <div class="api_metadata">
 <span>Added in: v0.11.7</span>
@@ -403,8 +424,7 @@ state.</p>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a></li>
 </ul>
 <p>By default set to Infinity. Determines how many concurrent sockets the agent
-can have open per origin. Origin is either a &#39;host:port&#39; or
-&#39;host:port:localAddress&#39; combination.</p>
+can have open per origin. Origin is the returned value of <a href="#http_agent_getname_options"><code>agent.getName()</code></a>.</p>
 <h3>agent.requests<span><a class="mark" href="#http_agent_requests" id="http_agent_requests">#</a></span></h3>
 <div class="api_metadata">
 <span>Added in: v0.5.9</span>
@@ -428,7 +448,7 @@ agent.  Do not modify.</p>
 represents an <em>in-progress</em> request whose header has already been queued.  The
 header is still mutable using the <code>setHeader(name, value)</code>, <code>getHeader(name)</code>,
 <code>removeHeader(name)</code> API.  The actual header will be sent along with the first
-data chunk or when closing the connection.</p>
+data chunk or when calling <a href="#http_request_end_data_encoding_callback"><code>request.end()</code></a>.</p>
 <p>To get the response, add a listener for <a href="#http_event_response"><code>&#39;response&#39;</code></a> to the request object.
 <a href="#http_event_response"><code>&#39;response&#39;</code></a> will be emitted from the request object when the response
 headers have been received.  The <a href="#http_event_response"><code>&#39;response&#39;</code></a> event is executed with one
@@ -676,11 +696,17 @@ because of how the protocol parser attaches to the socket. After
 via <code>request.connection</code>.</p>
 <p>Example:</p>
 <pre><code class="lang-js">const http = require(&#39;http&#39;);
-const server = http.createServer((req, res) =&gt; {
-  const ip = req.socket.remoteAddress;
-  const port = req.socket.remotePort;
-  res.end(`Your IP address is ${ip} and your source port is ${port}.`);
-}).listen(3000);
+const options = {
+  host: &#39;www.google.com&#39;,
+};
+const req = http.get(options);
+req.end();
+req.once(&#39;response&#39;, (res) =&gt; {
+  const ip = req.socket.localAddress;
+  const port = req.socket.localPort;
+  console.log(`Your IP address is ${ip} and your source port is ${port}.`);
+  // consume response object
+});
 </code></pre>
 <h3>request.write(chunk[, encoding][, callback])<span><a class="mark" href="#http_request_write_chunk_encoding_callback" id="http_request_write_chunk_encoding_callback">#</a></span></h3>
 <div class="api_metadata">
@@ -724,7 +750,7 @@ not be emitted.</p>
 <div class="api_metadata">
 <span>Added in: v5.5.0</span>
 </div><ul>
-<li><code>request</code> <a href="http.html#http_class_http_clientrequest" class="type">&lt;http.ClientRequest&gt;</a></li>
+<li><code>request</code> <a href="http.html#http_class_http_incomingmessage" class="type">&lt;http.IncomingMessage&gt;</a></li>
 <li><code>response</code> <a href="http.html#http_class_http_serverresponse" class="type">&lt;http.ServerResponse&gt;</a></li>
 </ul>
 <p>Emitted each time a request with an HTTP <code>Expect</code> header is received, where the
@@ -1162,8 +1188,8 @@ via <code>response.connection</code>.</p>
 <p>Example:</p>
 <pre><code class="lang-js">const http = require(&#39;http&#39;);
 const server = http.createServer((req, res) =&gt; {
-  const ip = req.socket.remoteAddress;
-  const port = req.socket.remotePort;
+  const ip = res.socket.remoteAddress;
+  const port = res.socket.remotePort;
   res.end(`Your IP address is ${ip} and your source port is ${port}.`);
 }).listen(3000);
 </code></pre>
@@ -1534,8 +1560,8 @@ Properties that are inherited from the prototype are ignored.</li>
 <p>Since most requests are GET requests without bodies, Node.js provides this
 convenience method. The only difference between this method and
 <a href="#http_http_request_options_callback"><code>http.request()</code></a> is that it sets the method to GET and calls <code>req.end()</code>
-automatically. Note that response data must be consumed in the callback
-for reasons stated in <a href="#http_class_http_clientrequest"><code>http.ClientRequest</code></a> section.</p>
+automatically. Note that the callback must take care to consume the response
+data for reasons stated in <a href="#http_class_http_clientrequest"><code>http.ClientRequest</code></a> section.</p>
 <p>The <code>callback</code> is invoked with a single argument that is an instance of
 <a href="#http_class_http_incomingmessage"><code>http.IncomingMessage</code></a></p>
 <p>JSON Fetching Example:</p>

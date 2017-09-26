@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Deprecated APIs | Node.js v8.4.0 Documentation</title>
+  <title>Deprecated APIs | Node.js v8.5.0 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/sh.css">
@@ -37,6 +37,7 @@
 <li><a class="nav-deprecations active" href="deprecations.html">Deprecated APIs</a></li>
 <li><a class="nav-dns" href="dns.html">DNS</a></li>
 <li><a class="nav-domain" href="domain.html">Domain</a></li>
+<li><a class="nav-esm" href="esm.html">ECMAScript Modules</a></li>
 <li><a class="nav-errors" href="errors.html">Errors</a></li>
 <li><a class="nav-events" href="events.html">Events</a></li>
 <li><a class="nav-fs" href="fs.html">File System</a></li>
@@ -50,6 +51,7 @@
 <li><a class="nav-net" href="net.html">Net</a></li>
 <li><a class="nav-os" href="os.html">OS</a></li>
 <li><a class="nav-path" href="path.html">Path</a></li>
+<li><a class="nav-perf_hooks" href="perf_hooks.html">Performance Hooks</a></li>
 <li><a class="nav-process" href="process.html">Process</a></li>
 <li><a class="nav-punycode" href="punycode.html">Punycode</a></li>
 <li><a class="nav-querystring" href="querystring.html">Query Strings</a></li>
@@ -79,13 +81,23 @@
 
     <div id="column1" data-id="deprecations" class="interior">
       <header>
-        <h1>Node.js v8.4.0 Documentation</h1>
+        <h1>Node.js v8.5.0 Documentation</h1>
         <div id="gtoc">
-          <p>
-            <a href="index.html" name="toc">Index</a> |
-            <a href="all.html">View on single page</a> |
-            <a href="deprecations.json">View as JSON</a>
-          </p>
+          <ul>
+            <li>
+              <a href="index.html" name="toc">Index</a> |
+            </li>
+            <li>
+              <a href="all.html">View on single page</a> |
+            </li>
+            <li>
+              <a href="deprecations.json">View as JSON</a> |
+            </li>
+            <li class="version-picker">
+              <a href="#">View another version <span>&#x25bc;</span></a>
+              
+            </li>
+          </ul>
         </div>
         <hr>
       </header>
@@ -108,7 +120,7 @@
 <li><span class="stability_undefined"><a href="#deprecations_dep0010_crypto_createcredentials">DEP0010: crypto.createCredentials</a></span></li>
 <li><span class="stability_undefined"><a href="#deprecations_dep0011_crypto_credentials">DEP0011: crypto.Credentials</a></span></li>
 <li><span class="stability_undefined"><a href="#deprecations_dep0012_domain_dispose">DEP0012: Domain.dispose</a></span></li>
-<li><span class="stability_undefined"><a href="#deprecations_dep0013_fs_async_function_without_callback">DEP0013: fs async function without callback</a></span></li>
+<li><span class="stability_undefined"><a href="#deprecations_dep0013_fs_asynchronous_function_without_callback">DEP0013: fs asynchronous function without callback</a></span></li>
 <li><span class="stability_undefined"><a href="#deprecations_dep0014_fs_read_legacy_string_interface">DEP0014: fs.read legacy String interface</a></span></li>
 <li><span class="stability_undefined"><a href="#deprecations_dep0015_fs_readsync_legacy_string_interface">DEP0015: fs.readSync legacy String interface</a></span></li>
 <li><span class="stability_undefined"><a href="#deprecations_dep0016_global_root">DEP0016: GLOBAL/root</a></span></li>
@@ -283,7 +295,7 @@ instead.</p>
 <p><a href="domain.html#domain_domain_dispose"><code>Domain.dispose()</code></a> is deprecated. Recover from failed I/O actions
 explicitly via error event handlers set on the domain instead.</p>
 <p><a id="DEP0013"></a></p>
-<h3>DEP0013: fs async function without callback<span><a class="mark" href="#deprecations_dep0013_fs_async_function_without_callback" id="deprecations_dep0013_fs_async_function_without_callback">#</a></span></h3>
+<h3>DEP0013: fs asynchronous function without callback<span><a class="mark" href="#deprecations_dep0013_fs_asynchronous_function_without_callback" id="deprecations_dep0013_fs_asynchronous_function_without_callback">#</a></span></h3>
 <p>Type: Runtime</p>
 <p>Calling an asynchronous function without a callback is deprecated.</p>
 <p><a id="DEP0014"></a></p>

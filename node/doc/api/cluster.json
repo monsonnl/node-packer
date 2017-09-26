@@ -4,6 +4,7 @@
     {
       "textRaw": "Cluster",
       "name": "cluster",
+      "introduced_in": "v0.10.0",
       "stability": 2,
       "stabilityText": "Stable",
       "desc": "<p>A single instance of Node.js runs in a single thread. To take advantage of\nmulti-core systems the user will sometimes want to launch a cluster of Node.js\nprocesses to handle the load.</p>\n<p>The cluster module allows easy creation of child processes that all share\nserver ports.</p>\n<pre><code class=\"lang-js\">const cluster = require(&#39;cluster&#39;);\nconst http = require(&#39;http&#39;);\nconst numCPUs = require(&#39;os&#39;).cpus().length;\n\nif (cluster.isMaster) {\n  console.log(`Master ${process.pid} is running`);\n\n  // Fork workers.\n  for (let i = 0; i &lt; numCPUs; i++) {\n    cluster.fork();\n  }\n\n  cluster.on(&#39;exit&#39;, (worker, code, signal) =&gt; {\n    console.log(`worker ${worker.process.pid} died`);\n  });\n} else {\n  // Workers can share any TCP connection\n  // In this case it is an HTTP server\n  http.createServer((req, res) =&gt; {\n    res.writeHead(200);\n    res.end(&#39;hello world\\n&#39;);\n  }).listen(8000);\n\n  console.log(`Worker ${process.pid} started`);\n}\n</code></pre>\n<p>Running Node.js will now share port 8000 between the workers:</p>\n<pre><code class=\"lang-txt\">$ node server.js\nMaster 3596 is running\nWorker 4324 started\nWorker 4520 started\nWorker 6056 started\nWorker 5644 started\n</code></pre>\n<p>Please note that on Windows, it is not yet possible to set up a named pipe\nserver in a worker.</p>\n",
